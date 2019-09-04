@@ -9,6 +9,7 @@ class App {
     val androidX = "1.1.0-rc01"
     val rxAndroid = "2.1.1"
     val rxJava = "2.1.13"
+    val rxBinding = "3.0.0"
     val material = "1.1.0-alpha09"
     val constraintLayout = "2.0.0-beta2"
     val recyclerView = "1.1.0-beta01"
