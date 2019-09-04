@@ -15,10 +15,12 @@ class MainContract {
         val onNumpad8Click: Observable<Char>
         val onNumpad9Click: Observable<Char>
         val backSpaceClick: Observable<Unit>
+        val dotClick: Observable<Char>
     }
 
     data class ScreenState(
         val inputNumberString: String = "0",
-        val outputNumberString: String = "0"
+        val outputNumberString: String = "0",
+        val isEnableDot: Boolean = true
     )
 }

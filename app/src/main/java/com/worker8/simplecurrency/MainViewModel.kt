@@ -16,22 +16,26 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
+            //val dotObsShared = dotClick.map { it.toString() }.share()
             val newInputStringObsShared = Observable.merge(
                 arrayListOf(
-                    input.onNumpad0Click,
-                    input.onNumpad1Click,
-                    input.onNumpad2Click,
-                    input.onNumpad3Click,
-                    input.onNumpad4Click,
-                    input.onNumpad5Click,
-                    input.onNumpad6Click,
-                    input.onNumpad7Click,
-                    input.onNumpad8Click,
-                    input.onNumpad9Click
+                    onNumpad0Click,
+                    onNumpad1Click,
+                    onNumpad2Click,
+                    onNumpad3Click,
+                    onNumpad4Click,
+                    onNumpad5Click,
+                    onNumpad6Click,
+                    onNumpad7Click,
+                    onNumpad8Click,
+                    onNumpad9Click,
+                    dotClick
                 )
             )
                 .map { newChar ->
-                    if (currentScreenState.inputNumberString.length == 1 && currentScreenState.inputNumberString == "0") {
+                    if (newChar == '.') {
+                        currentScreenState.inputNumberString + newChar
+                    } else if (currentScreenState.inputNumberString.length == 1 && currentScreenState.inputNumberString == "0") {
                         newChar.toString()
                     } else {
                         currentScreenState.inputNumberString + newChar
@@ -39,7 +43,7 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                 }
                 .share()
 
-            val backSpaceObsShared: Observable<String> = backSpaceClick.map {
+            val backSpaceObsShared = backSpaceClick.map {
                 if (currentScreenState.inputNumberString.isEmpty() || currentScreenState.inputNumberString == "0") {
                     currentScreenState.inputNumberString
                 } else if (currentScreenState.inputNumberString.length == 1) {
@@ -54,22 +58,38 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
 
             Observable.merge(newInputStringObsShared, backSpaceObsShared)
                 .map { newInputString ->
-                    try {
-                        Result.success<Int>(Integer.valueOf(newInputString))
-                    } catch (exception: NumberFormatException) {
-                        Result.failure<Int>(exception)
+                    val dotRemoved = if (newInputString.isNotEmpty() && newInputString.last() == '.') {
+                        newInputString.removeRange(
+                            newInputString.length - 1,
+                            newInputString.length
+                        )
+                    } else {
+                        newInputString
+                    }
+                    val tempDouble = dotRemoved.toDoubleOrNull()
+                    return@map if (tempDouble != null) {
+                        Result.success(tempDouble)
+                    } else {
+                        Result.failure(Exception())
                     }
                 }
                 .filter { it.isSuccess }
-                .map { it.getOrDefault(0) * fakeExchangeRate }
+                .map { it.getOrDefault(0.0) * fakeExchangeRate }
                 .subscribe { outputCurrency ->
                     dispatch(currentScreenState.copy(outputNumberString = outputCurrency.toString()))
                 }
                 .addTo(disposableBag)
 
-            Observable.merge(newInputStringObsShared, backSpaceObsShared).subscribe { newInputString ->
-                dispatch(currentScreenState.copy(inputNumberString = newInputString))
-            }
+            Observable.merge(newInputStringObsShared, backSpaceObsShared)
+                .subscribe { newInputString ->
+                    dispatch(currentScreenState.copy(inputNumberString = newInputString))
+                }
+                .addTo(disposableBag)
+
+            Observable.merge(newInputStringObsShared, backSpaceObsShared)
+                .subscribe { newInputString ->
+                    dispatch(currentScreenState.copy(isEnableDot = !newInputString.contains(".")))
+                }
                 .addTo(disposableBag)
         }
     }

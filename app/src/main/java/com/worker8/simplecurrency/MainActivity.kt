@@ -1,6 +1,7 @@
 package com.worker8.simplecurrency
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             override val onNumpad8Click by lazy { mainNum8.clicks().map { '8' } }
             override val onNumpad9Click by lazy { mainNum9.clicks().map { '9' } }
             override val backSpaceClick by lazy { mainNumBackspace.clicks() }
+            override val dotClick by lazy { mainNumDot.clicks().map { '.' } }
         }
         setContentView(R.layout.activity_main)
         val viewModel =
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 it.apply {
                     mainInputNumber.text = inputNumberString
                     mainOutputNumber.text = outputNumberString
+                    mainNumDot.isEnabled = isEnableDot
                 }
             }
             .addTo(disposableBag)
