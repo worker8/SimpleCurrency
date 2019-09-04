@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             override val onNumpad7Click by lazy { mainNum7.clicks().map { '7' } }
             override val onNumpad8Click by lazy { mainNum8.clicks().map { '8' } }
             override val onNumpad9Click by lazy { mainNum9.clicks().map { '9' } }
+            override val backSpaceClick by lazy { mainNumBackspace.clicks() }
         }
         setContentView(R.layout.activity_main)
         val viewModel =

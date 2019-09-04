@@ -14,6 +14,7 @@ class MainContract {
         val onNumpad7Click: Observable<Char>
         val onNumpad8Click: Observable<Char>
         val onNumpad9Click: Observable<Char>
+        val backSpaceClick: Observable<Unit>
     }
 
     data class ScreenState(

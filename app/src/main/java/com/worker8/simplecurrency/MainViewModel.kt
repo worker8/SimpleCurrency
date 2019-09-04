@@ -39,13 +39,27 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                 }
                 .share()
 
-            newInputStringObsShared.map { newInputString ->
-                try {
-                    Result.success<Int>(Integer.valueOf(newInputString))
-                } catch (exception: NumberFormatException) {
-                    Result.failure<Int>(exception)
+            val backSpaceObsShared: Observable<String> = backSpaceClick.map {
+                if (currentScreenState.inputNumberString.isEmpty() || currentScreenState.inputNumberString == "0") {
+                    currentScreenState.inputNumberString
+                } else if (currentScreenState.inputNumberString.length == 1) {
+                    "0"
+                } else {
+                    currentScreenState.inputNumberString.removeRange(
+                        currentScreenState.inputNumberString.length - 1,
+                        currentScreenState.inputNumberString.length
+                    )
                 }
-            }
+            }.share()
+
+            Observable.merge(newInputStringObsShared, backSpaceObsShared)
+                .map { newInputString ->
+                    try {
+                        Result.success<Int>(Integer.valueOf(newInputString))
+                    } catch (exception: NumberFormatException) {
+                        Result.failure<Int>(exception)
+                    }
+                }
                 .filter { it.isSuccess }
                 .map { it.getOrDefault(0) * fakeExchangeRate }
                 .subscribe { outputCurrency ->
@@ -53,7 +67,7 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                 }
                 .addTo(disposableBag)
 
-            newInputStringObsShared.subscribe { newInputString ->
+            Observable.merge(newInputStringObsShared, backSpaceObsShared).subscribe { newInputString ->
                 dispatch(currentScreenState.copy(inputNumberString = newInputString))
             }
                 .addTo(disposableBag)
