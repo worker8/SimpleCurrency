@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@id/mainGuideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/mainInputFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="🇨🇦"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+
+    <TextView
+        android:id="@+id/mainInputCurrencyLabelFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="FROM"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/mainGuideline1"
+        app:layout_constraintStart_toEndOf="@id/mainInputFlag" />
+
+    <TextView
+        android:id="@+id/mainInputCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USD"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/mainInputCurrencyLabelFrom"
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline1" />
+
+    <TextView
+        android:id="@+id/mainInputNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="123.00"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+
+    <TextView
+        android:id="@+id/mainInputSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/mainInputNumber"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mainFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:tint="@android:color/white"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline2" />
+
+    <TextView
+        android:id="@+id/mainOutputFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="🇨🇦"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
+
+    <TextView
+        android:id="@+id/mainOutputCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EURO"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/mainOutputCurrencyLabelTo"
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline3" />
+
+    <TextView
+        android:id="@+id/mainOutputCurrencyLabelTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="TO"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/mainGuideline3"
+        app:layout_constraintStart_toEndOf="@id/mainOutputFlag" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/white50"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.075" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainGuideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.225" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainGuideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

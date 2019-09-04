@@ -1,0 +1,34 @@
+.gradle/
+local.properties
+api_keys.properties
+
+*/build/
+secret.gradle
+proguard.map
+
+*~
+*.swp
+.DS_Store
+build
+
+# Android Studio
+.idea/*
+!.idea/codeStyles/Project.xml
+!.idea/codeStyles/codeStyleConfig.xml
+*.iml
+*.ipr
+*.iws
+
+# Keystore
+#signing.gradle
+
+# Crashlytics
+com_crashlytics_export_strings.xml
+crashlytics-build.properties
+crashlytics.properties
+
+# integration tests
+artifacts
+
+# Documentations
+design/

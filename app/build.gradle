@@ -1,0 +1,36 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-kapt"
+
+android {
+    compileSdkVersion Versions.AndroidConfig.sdkVersion
+    defaultConfig {
+        applicationId "com.worker8.simplecurrency"
+        minSdkVersion Versions.AndroidConfig.minSdkVersion
+        targetSdkVersion Versions.AndroidConfig.sdkVersion
+        versionCode Versions.AndroidConfig.versionCode
+        versionName Versions.AndroidConfig.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$Versions.Tool.kotlin"
+    implementation "io.reactivex.rxjava2:rxjava:$Versions.App.rxJava"
+    implementation "io.reactivex.rxjava2:rxandroid:$Versions.App.rxAndroid"
+    implementation "androidx.appcompat:appcompat:$Versions.App.androidX"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$Versions.App.viewModel"
+    implementation "androidx.constraintlayout:constraintlayout:$Versions.App.constraintLayout"
+    implementation "com.google.android.material:material:$Versions.App.material"
+    testImplementation "junit:junit:$Versions.Test.junit"
+    androidTestImplementation "com.android.support.test:runner:$Versions.Test.runner"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$Versions.Test.espresso"
+}
