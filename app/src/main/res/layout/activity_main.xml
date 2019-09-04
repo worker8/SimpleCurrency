@@ -115,10 +115,34 @@
         app:layout_constraintBottom_toTopOf="@id/mainGuideline3"
         app:layout_constraintStart_toEndOf="@id/mainOutputFlag" />
 
+    <TextView
+        android:id="@+id/mainOutputSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¥"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
+        app:layout_constraintEnd_toStartOf="@id/mainOutputNumber"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
+
+    <TextView
+        android:id="@+id/mainOutputNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="89.00"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
+
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/white50"
+        android:background="@color/white30"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -152,5 +176,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.3" />
 
+    <include
+        layout="@layout/numpad"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
