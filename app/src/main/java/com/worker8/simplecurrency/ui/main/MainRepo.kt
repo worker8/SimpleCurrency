@@ -1,4 +1,4 @@
-package com.worker8.simplecurrency
+package com.worker8.simplecurrency.ui.main
 
 import io.reactivex.Scheduler
 

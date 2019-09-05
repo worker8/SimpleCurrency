@@ -1,6 +1,8 @@
-package com.worker8.simplecurrency
+package com.worker8.simplecurrency.ui.main
 
 import androidx.lifecycle.*
+import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.realValue
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
