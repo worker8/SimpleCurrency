@@ -16,6 +16,7 @@ import org.junit.runner.RunWith
 class RoomConversionRateDaoTest() {
     private lateinit var roomConversionRateDao: RoomConversionRateDao
     private lateinit var db: SimpleCurrencyDatabase
+
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
