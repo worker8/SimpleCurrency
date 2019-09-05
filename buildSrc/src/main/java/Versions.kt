@@ -26,8 +26,10 @@ class App {
 
 class Test {
     val junit = "4.12"
-    val runner = "1.0.2"
-    val espresso = "3.0.2"
+    val runner = "1.2.0"
+    val core = "1.2.0"
+    val junitExt = "1.1.0"
+    val espresso = "3.2.0"
 }
 
 class Tool {

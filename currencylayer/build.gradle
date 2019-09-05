@@ -9,7 +9,7 @@ android {
         targetSdkVersion Versions.AndroidConfig.sdkVersion
         versionCode Versions.AndroidConfig.versionCode
         versionName Versions.AndroidConfig.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -33,5 +33,5 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$Versions.App.moshi"
 
     testImplementation "junit:junit:$Versions.Test.junit"
-    androidTestImplementation "com.android.support.test:runner:$Versions.Test.runner"
+    androidTestImplementation "androidx.test:runner:$Versions.Test.runner"
 }

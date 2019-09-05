@@ -11,7 +11,7 @@ android {
         targetSdkVersion Versions.AndroidConfig.sdkVersion
         versionCode Versions.AndroidConfig.versionCode
         versionName Versions.AndroidConfig.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -45,6 +45,8 @@ dependencies {
 
     /* Test */
     testImplementation "junit:junit:$Versions.Test.junit"
-    androidTestImplementation "com.android.support.test:runner:$Versions.Test.runner"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$Versions.Test.espresso"
+    androidTestImplementation "androidx.test.ext:junit:$Versions.Test.junitExt"
+    androidTestImplementation "androidx.test:core:$Versions.Test.core"
+    androidTestImplementation "androidx.test:runner:$Versions.Test.runner"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$Versions.Test.espresso"
 }

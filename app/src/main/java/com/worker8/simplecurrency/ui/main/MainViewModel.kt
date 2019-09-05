@@ -19,9 +19,6 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
     var screenState = screenStateSubject.hide().observeOn(repo.mainThread)
     val fakeExchangeRate = 0.0094
 
-    fun outputNumberStringUseCase(){
-
-    }
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
