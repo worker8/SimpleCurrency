@@ -1,7 +1,6 @@
 package com.worker8.simplecurrency
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks

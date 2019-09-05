@@ -4,6 +4,10 @@ import androidx.lifecycle.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class MainViewModel(private val input: MainContract.Input, private val repo: MainRepo) :
     ViewModel(), LifecycleObserver {
@@ -11,8 +15,11 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
     private val disposableBag = CompositeDisposable()
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.mainThread)
-    val fakeExchangeRate = 2
+    val fakeExchangeRate = 0.0094
 
+    fun outputNumberStringUseCase(){
+
+    }
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
@@ -34,29 +41,29 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
             )
                 .map { newChar ->
                     if (newChar == '.') {
-                        currentScreenState.inputNumberString + newChar
-                    } else if (currentScreenState.inputNumberString.length == 1 && currentScreenState.inputNumberString == "0") {
+                        currentInputString() + newChar
+                    } else if (currentInputString().length == 1 && currentInputString() == "0") {
                         newChar.toString()
                     } else {
-                        currentScreenState.inputNumberString + newChar
+                        currentInputString() + newChar
                     }
                 }
                 .share()
 
             val backSpaceObsShared = backSpaceClick.map {
-                if (currentScreenState.inputNumberString.isEmpty() || currentScreenState.inputNumberString == "0") {
-                    currentScreenState.inputNumberString
-                } else if (currentScreenState.inputNumberString.length == 1) {
+                if (currentInputString().isEmpty() || currentInputString() == "0") {
+                    currentInputString()
+                } else if (currentInputString().length == 1) {
                     "0"
                 } else {
-                    currentScreenState.inputNumberString.removeRange(
-                        currentScreenState.inputNumberString.length - 1,
-                        currentScreenState.inputNumberString.length
+                    currentInputString().removeRange(
+                        currentInputString().length - 1,
+                        currentInputString().length
                     )
                 }
             }.share()
 
-            Observable.merge(newInputStringObsShared, backSpaceObsShared)
+            val processedInputDoubleObsShared = Observable.merge(newInputStringObsShared, backSpaceObsShared)
                 .map { newInputString ->
                     val dotRemoved = if (newInputString.isNotEmpty() && newInputString.last() == '.') {
                         newInputString.removeRange(
@@ -74,24 +81,66 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                     }
                 }
                 .filter { it.isSuccess }
+                .share()
+
+            processedInputDoubleObsShared
                 .map { it.getOrDefault(0.0) * fakeExchangeRate }
                 .subscribe { outputCurrency ->
-                    dispatch(currentScreenState.copy(outputNumberString = outputCurrency.toString()))
+                    dispatch(
+                        currentScreenState.copy(
+                            outputNumberString =
+                            outputCurrency.toReadableFormat().addCurrencySymbol('$')
+                        )
+                    )
+                }
+                .addTo(disposableBag)
+
+            processedInputDoubleObsShared
+                .subscribe { newInputDouble ->
+                    dispatch(
+                        currentScreenState.copy(
+                            inputNumberString =
+                            newInputDouble.getOrDefault(0.0)
+                                .toReadableFormatInput()
+                                .addCurrencySymbol('¥')
+                        )
+                    )
                 }
                 .addTo(disposableBag)
 
             Observable.merge(newInputStringObsShared, backSpaceObsShared)
                 .subscribe { newInputString ->
-                    dispatch(currentScreenState.copy(inputNumberString = newInputString))
-                }
-                .addTo(disposableBag)
-
-            Observable.merge(newInputStringObsShared, backSpaceObsShared)
-                .subscribe { newInputString ->
-                    dispatch(currentScreenState.copy(isEnableDot = !newInputString.contains(".")))
+                    dispatch(
+                        currentScreenState.copy(
+                            inputNumberStringState = newInputString,
+                            isEnableDot = !newInputString.contains(".")
+                        )
+                    )
                 }
                 .addTo(disposableBag)
         }
+    }
+
+    private fun currentInputString(): String {
+        return currentScreenState.inputNumberStringState
+    }
+
+    private fun Double.toReadableFormatInput(): String {
+        val decimalFormat = DecimalFormat("#,###.#######################")
+        decimalFormat.decimalFormatSymbols = DecimalFormatSymbols(Locale.getDefault())
+        val bigDecimal = this.toBigDecimal()
+        return decimalFormat.format(bigDecimal)
+    }
+
+    private fun Double.toReadableFormat(): String {
+        val decimalFormat = DecimalFormat("#,###.##")
+        decimalFormat.decimalFormatSymbols = DecimalFormatSymbols(Locale.getDefault())
+        val bigDecimal = this.toBigDecimal().setScale(2, RoundingMode.HALF_UP)
+        return decimalFormat.format(bigDecimal)
+    }
+
+    private fun String.addCurrencySymbol(char: Char): String {
+        return "${char} ${this}"
     }
 
     override fun onCleared() {

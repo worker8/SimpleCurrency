@@ -6,14 +6,22 @@ object Versions {
 }
 
 class App {
+    /*  Architecture */
     val androidX = "1.1.0-rc01"
     val rxAndroid = "2.1.1"
     val rxJava = "2.1.13"
     val rxBinding = "3.0.0"
+    val viewModel = "2.0.0"
+
+    /* UI */
     val material = "1.1.0-alpha09"
     val constraintLayout = "2.0.0-beta2"
     val recyclerView = "1.1.0-beta01"
-    val viewModel = "2.0.0"
+
+    /* Network & Data Layer */
+    val moshi = "1.8.0"
+    val retrofit = "2.6.1"
+    val room = "2.1.0-alpha04"
 }
 
 class Test {

@@ -24,14 +24,26 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$Versions.Tool.kotlin"
-    implementation "io.reactivex.rxjava2:rxjava:$Versions.App.rxJava"
-    implementation "io.reactivex.rxjava2:rxandroid:$Versions.App.rxAndroid"
-    implementation "com.jakewharton.rxbinding3:rxbinding:$Versions.App.rxBinding"
+
+    /*  Architecture */
     implementation "androidx.appcompat:appcompat:$Versions.App.androidX"
     implementation "androidx.lifecycle:lifecycle-extensions:$Versions.App.viewModel"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$Versions.App.viewModel"
+    implementation "io.reactivex.rxjava2:rxjava:$Versions.App.rxJava"
+    implementation "io.reactivex.rxjava2:rxandroid:$Versions.App.rxAndroid"
+    implementation "com.jakewharton.rxbinding3:rxbinding:$Versions.App.rxBinding"
+
+    /* UI */
     implementation "androidx.constraintlayout:constraintlayout:$Versions.App.constraintLayout"
     implementation "com.google.android.material:material:$Versions.App.material"
+
+    /* Network & Data Layer */
+    implementation "androidx.room:room-runtime:$Versions.App.room"
+    implementation "androidx.room:room-rxjava2:$Versions.App.room"
+    annotationProcessor "androidx.room:room-compiler:$Versions.App.room"
+    kapt "androidx.room:room-compiler:$Versions.App.room"
+
+    /* Test */
     testImplementation "junit:junit:$Versions.Test.junit"
     androidTestImplementation "com.android.support.test:runner:$Versions.Test.runner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$Versions.Test.espresso"

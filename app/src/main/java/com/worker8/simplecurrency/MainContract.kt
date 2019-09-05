@@ -19,6 +19,7 @@ class MainContract {
     }
 
     data class ScreenState(
+        val inputNumberStringState: String = "0",
         val inputNumberString: String = "0",
         val outputNumberString: String = "0",
         val isEnableDot: Boolean = true
