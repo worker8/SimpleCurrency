@@ -16,7 +16,7 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
     private val screenStateSubject = BehaviorSubject.createDefault(MainContract.ScreenState())
     private val disposableBag = CompositeDisposable()
     val currentScreenState get() = screenStateSubject.realValue
-    var screenState = screenStateSubject.hide().observeOn(repo.mainThread)
+    var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     val fakeExchangeRate = 0.0094
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -116,6 +116,10 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                         )
                     )
                 }
+                .addTo(disposableBag)
+            repo.populateDbIfFirstTime()
+                .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
+                .subscribe()
                 .addTo(disposableBag)
         }
     }

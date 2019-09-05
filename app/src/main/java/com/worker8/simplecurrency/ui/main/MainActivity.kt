@@ -1,27 +1,27 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
 import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
+import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.numpad.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
     private val disposableBag = CompositeDisposable()
     lateinit var input: MainContract.Input
 
+    @Inject
+    lateinit var repo: MainRepo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val repo = MainRepo(
-            mainThread = AndroidSchedulers.mainThread(),
-            backgroundThread = Schedulers.io()
-        )
         input = object : MainContract.Input {
             override val onNumpad0Click by lazy { mainNum0.clicks().map { '0' } }
             override val onNumpad1Click by lazy { mainNum1.clicks().map { '1' } }
@@ -38,9 +38,8 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
         val viewModel =
-            ViewModelProviders.of(this,
-                MainViewModel.MainViewModelFactory(input, repo)
-            ).get(MainViewModel::class.java)
+            ViewModelProviders.of(this, MainViewModel.MainViewModelFactory(input, repo))
+                .get(MainViewModel::class.java)
         lifecycle.addObserver(viewModel)
         viewModel.screenState
             .subscribe {

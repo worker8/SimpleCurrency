@@ -2,6 +2,7 @@ object Versions {
     val App = App()
     val Test = Test()
     val Tool = Tool()
+    val Debug = Debug()
     val AndroidConfig = AndroidConfig()
 }
 
@@ -22,6 +23,13 @@ class App {
     val moshi = "1.8.0"
     val retrofit = "2.6.1"
     val room = "2.1.0-alpha04"
+
+    /* DI */
+    val dagger = "2.21"
+}
+
+class Debug {
+    val stetho = "1.5.0"
 }
 
 class Test {

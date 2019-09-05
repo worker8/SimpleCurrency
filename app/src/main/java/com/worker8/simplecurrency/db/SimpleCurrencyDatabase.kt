@@ -5,7 +5,6 @@ import androidx.room.RoomDatabase
 import com.worker8.simplecurrency.db.dao.RoomConversionRateDao
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 
-
 @Database(
     entities = [RoomConversionRate::class],
     version = 1
