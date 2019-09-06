@@ -1,14 +1,14 @@
 package com.worker8.simplecurrency.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
 import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.ui.picker.PickerActivity
 import dagger.android.support.DaggerAppCompatActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.numpad.*
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var repo: MainRepo
-
+    val PICKER_REQUEST_CODE = 3832
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         input = object : MainContract.Input {
@@ -41,6 +41,14 @@ class MainActivity : DaggerAppCompatActivity() {
             ViewModelProviders.of(this, MainViewModel.MainViewModelFactory(input, repo))
                 .get(MainViewModel::class.java)
         lifecycle.addObserver(viewModel)
+        mainBaseCurrencyPicker.setOnClickListener {
+            startActivityForResult(Intent(this@MainActivity, PickerActivity::class.java), PICKER_REQUEST_CODE)
+        }
+
+        mainTargetCurrencyPicker.setOnClickListener {
+            startActivityForResult(Intent(this@MainActivity, PickerActivity::class.java), PICKER_REQUEST_CODE)
+        }
+
         viewModel.screenState
             .subscribe {
                 it.apply {

@@ -24,7 +24,7 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
-            //val dotObsShared = dotClick.map { it.toString() }.share()
+
             val seedObs = repo.populateDbIfFirstTime()
                 .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
 

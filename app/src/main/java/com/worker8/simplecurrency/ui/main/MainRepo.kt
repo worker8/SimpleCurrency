@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @PerActivityScope
 class MainRepo @Inject constructor(
-    val context: Context,
+    private val context: Context,
     val db: SimpleCurrencyDatabase,
     val moshi: Moshi,
     val schedulerSharedRepo: SchedulerSharedRepo
