@@ -26,7 +26,7 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                         roomConversionRate.run {
                             PickerAdapter.PickerRowType(
                                 currencyName = Currency.ALL.get(getCodeWithoutUSD()) ?: "",
-                                currencyRate = "1 USD = ${(1 / rate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
+                                currencyRate = "1 ${getCodeWithoutUSD()} = ${(1 / rate).toTwoDecimalWithComma()} USD",
                                 currencyCode = getCodeWithoutUSD()
                             )
                         }
