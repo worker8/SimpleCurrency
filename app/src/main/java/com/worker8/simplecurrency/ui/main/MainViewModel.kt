@@ -3,8 +3,11 @@ package com.worker8.simplecurrency.ui.main
 import androidx.lifecycle.*
 import com.worker8.simplecurrency.addTo
 import com.worker8.simplecurrency.realValue
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -17,13 +20,15 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
     private val disposableBag = CompositeDisposable()
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
-    val fakeExchangeRate = 0.0094
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
             //val dotObsShared = dotClick.map { it.toString() }.share()
-            val newInputStringObsShared = Observable.merge(
+            val seedObs = repo.populateDbIfFirstTime()
+                .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
+
+            val concatObsShared = Observable.merge(
                 arrayListOf(
                     onNumpad0Click,
                     onNumpad1Click,
@@ -40,10 +45,17 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
             )
                 .map { newChar ->
                     if (newChar == '.') {
+                        // handling '.' as input
+                        // before: "0"  --> after: "0."
+                        // before: "123 --> after: "123.
                         currentInputString() + newChar
                     } else if (currentInputString().length == 1 && currentInputString() == "0") {
+                        // handle case when input is "0" (beginning)
+                        // before: "0" --> after: "2"
                         newChar.toString()
                     } else {
+                        // handle normal case
+                        // before "123", after "1234"
                         currentInputString() + newChar
                     }
                 }
@@ -62,28 +74,42 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                 }
             }.share()
 
-            val processedInputDoubleObsShared = Observable.merge(newInputStringObsShared, backSpaceObsShared)
-                .map { newInputString ->
-                    val dotRemoved = if (newInputString.isNotEmpty() && newInputString.last() == '.') {
-                        newInputString.removeRange(
-                            newInputString.length - 1,
-                            newInputString.length
+            Observable.merge(concatObsShared, backSpaceObsShared)
+                .subscribe { newInputString ->
+                    dispatch(
+                        currentScreenState.copy(
+                            inputNumberStringState = newInputString,
+                            isEnableDot = !newInputString.contains(".")
+                        )
+                    )
+                }
+                .addTo(disposableBag)
+
+            val calculateObsShared = Flowable.combineLatest(
+                Observable.merge(concatObsShared, backSpaceObsShared).toFlowable(BackpressureStrategy.LATEST),
+                seedObs.toFlowable(BackpressureStrategy.DROP).flatMap { repo.getLatestSelectedRateFlowable() },
+                BiFunction<String, Double, Result<Pair<Double, Double>>> { numberString, rate ->
+                    val dotRemoved = if (numberString.isNotEmpty() && numberString.last() == '.') {
+                        numberString.removeRange(
+                            numberString.length - 1,
+                            numberString.length
                         )
                     } else {
-                        newInputString
+                        numberString
                     }
-                    val tempDouble = dotRemoved.toDoubleOrNull()
-                    return@map if (tempDouble != null) {
-                        Result.success(tempDouble)
+                    val input = dotRemoved.toDoubleOrNull()
+                    return@BiFunction if (input != null) {
+                        Result.success(input to rate)
                     } else {
                         Result.failure(Exception())
                     }
-                }
-                .filter { it.isSuccess }
-                .share()
+                })
 
-            processedInputDoubleObsShared
-                .map { it.getOrDefault(0.0) * fakeExchangeRate }
+            calculateObsShared
+                .map { result ->
+                    val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
+                    input * rate
+                }
                 .subscribe { outputCurrency ->
                     dispatch(
                         currentScreenState.copy(
@@ -94,32 +120,21 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                 }
                 .addTo(disposableBag)
 
-            processedInputDoubleObsShared
+            calculateObsShared
+                .map { result ->
+                    val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
+                    input
+                }
                 .subscribe { newInputDouble ->
                     dispatch(
                         currentScreenState.copy(
                             inputNumberString =
-                            newInputDouble.getOrDefault(0.0)
+                            newInputDouble
                                 .toReadableFormatInput()
                                 .addCurrencySymbol('¥')
                         )
                     )
                 }
-                .addTo(disposableBag)
-
-            Observable.merge(newInputStringObsShared, backSpaceObsShared)
-                .subscribe { newInputString ->
-                    dispatch(
-                        currentScreenState.copy(
-                            inputNumberStringState = newInputString,
-                            isEnableDot = !newInputString.contains(".")
-                        )
-                    )
-                }
-                .addTo(disposableBag)
-            repo.populateDbIfFirstTime()
-                .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
-                .subscribe()
                 .addTo(disposableBag)
         }
     }
