@@ -1,5 +1,6 @@
 package com.worker8.simplecurrency.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
@@ -9,6 +10,7 @@ import com.worker8.simplecurrency.addTo
 import com.worker8.simplecurrency.ui.picker.PickerActivity
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.numpad.*
 import javax.inject.Inject
@@ -17,12 +19,19 @@ class MainActivity : DaggerAppCompatActivity() {
     private val disposableBag = CompositeDisposable()
     lateinit var input: MainContract.Input
 
+    private val onBaseCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
+    private val onTargetCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
+
     @Inject
     lateinit var repo: MainRepo
-    val PICKER_REQUEST_CODE = 3832
+    val PICKER_BASE_REQUEST_CODE = 3832
+    val PICKER_TARGET_REQUEST_CODE = 3833
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         input = object : MainContract.Input {
+            override val onBaseCurrencyChanged = onBaseCurrencyChangedSubject.hide()
+            override val onTargetCurrencyChanged = onTargetCurrencyChangedSubject.hide()
             override val onNumpad0Click by lazy { mainNum0.clicks().map { '0' } }
             override val onNumpad1Click by lazy { mainNum1.clicks().map { '1' } }
             override val onNumpad2Click by lazy { mainNum2.clicks().map { '2' } }
@@ -42,11 +51,15 @@ class MainActivity : DaggerAppCompatActivity() {
                 .get(MainViewModel::class.java)
         lifecycle.addObserver(viewModel)
         mainBaseCurrencyPicker.setOnClickListener {
-            startActivityForResult(Intent(this@MainActivity, PickerActivity::class.java), PICKER_REQUEST_CODE)
+            val intent = Intent(this@MainActivity, PickerActivity::class.java)
+                .apply { putExtra(PickerActivity.BASE_OR_TARGET_KEY, true) }
+            startActivityForResult(intent, PICKER_BASE_REQUEST_CODE)
         }
 
         mainTargetCurrencyPicker.setOnClickListener {
-            startActivityForResult(Intent(this@MainActivity, PickerActivity::class.java), PICKER_REQUEST_CODE)
+            val intent = Intent(this@MainActivity, PickerActivity::class.java)
+                .apply { putExtra(PickerActivity.BASE_OR_TARGET_KEY, false) }
+            startActivityForResult(intent, PICKER_TARGET_REQUEST_CODE)
         }
 
         viewModel.screenState
@@ -58,6 +71,24 @@ class MainActivity : DaggerAppCompatActivity() {
                 }
             }
             .addTo(disposableBag)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PICKER_BASE_REQUEST_CODE -> {
+                    data?.getStringExtra(PickerActivity.RESULT_KEY)?.let {
+                        onBaseCurrencyChangedSubject.onNext(it)
+                    }
+                }
+                PICKER_TARGET_REQUEST_CODE -> {
+                    data?.getStringExtra(PickerActivity.RESULT_KEY)?.let {
+                        onTargetCurrencyChangedSubject.onNext(it)
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroy() {

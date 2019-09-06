@@ -37,17 +37,17 @@ class MainRepo @Inject constructor(
         }
     }
 
-    fun setSelectedBaseCurrencyCode(context: Context, currencyCode: String) =
-        MainPreference.setSelectedBaseCurrencyCode(context, currencyCode)
-
     fun getSelectedBaseCurrencyCode(context: Context) =
         MainPreference.getSelectedBaseCurrencyCode(context)
 
-    fun setSelectedTargetCurrencyCode(context: Context, currencyCode: String) =
-        MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
-
     fun getSelectedTargetCurrencyCode(context: Context) =
         MainPreference.getSelectedTargetCurrencyCode(context)
+
+    fun setSelectedBaseCurrencyCode(currencyCode: String) =
+        MainPreference.setSelectedBaseCurrencyCode(context, currencyCode)
+
+    fun setSelectedTargetCurrencyCode(currencyCode: String) =
+        MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 
     fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
         val base = getSelectedBaseCurrencyCode(context) // "JPY"

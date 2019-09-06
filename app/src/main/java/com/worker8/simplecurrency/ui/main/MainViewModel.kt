@@ -1,9 +1,10 @@
 package com.worker8.simplecurrency.ui.main
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.worker8.simplecurrency.addTo
-import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.extension.toComma
+import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.realValue
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -133,6 +134,13 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                         )
                     )
                 }
+                .addTo(disposableBag)
+            onBaseCurrencyChanged
+                .subscribe { Log.d("ddw", "selected base currency: ${it}") }
+                .addTo(disposableBag)
+
+            onTargetCurrencyChanged
+                .subscribe { Log.d("ddw", "selected target currency: ${it}") }
                 .addTo(disposableBag)
         }
     }

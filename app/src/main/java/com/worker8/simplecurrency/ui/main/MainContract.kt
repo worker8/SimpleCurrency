@@ -16,6 +16,8 @@ class MainContract {
         val onNumpad9Click: Observable<Char>
         val backSpaceClick: Observable<Unit>
         val dotClick: Observable<Char>
+        val onBaseCurrencyChanged: Observable<String>
+        val onTargetCurrencyChanged: Observable<String>
     }
 
     data class ScreenState(

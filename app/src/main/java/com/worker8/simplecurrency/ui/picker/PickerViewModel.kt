@@ -36,6 +36,16 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                     dispatch(currentScreenState.copy(it))
                 }
                 .addTo(disposableBag)
+
+//            selectedCurrencyCode
+//                .subscribe {
+//                    if (isBase) {
+//                        repo.setSelectedBaseCurrencyCode(it)
+//                    } else {
+//                        repo.setSelectedTargetCurrencyCode(it)
+//                    }
+//                }
+//                .addTo(disposableBag)
         }
     }
 

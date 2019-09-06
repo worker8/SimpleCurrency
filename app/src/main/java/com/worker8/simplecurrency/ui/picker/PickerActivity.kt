@@ -1,5 +1,6 @@
 package com.worker8.simplecurrency.ui.picker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.worker8.simplecurrency.R
@@ -15,21 +16,30 @@ class PickerActivity : DaggerAppCompatActivity() {
     lateinit var input: PickerContract.Input
     val adapter = PickerAdapter()
     private val disposableBag = CompositeDisposable()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picker)
 
         input = object : PickerContract.Input {
-
+            override val isBase = intent.getBooleanExtra(BASE_OR_TARGET_KEY, true)
         }
         pickerRecyclerView.adapter = adapter
         val viewModel =
             ViewModelProviders.of(this, PickerViewModel.PickerViewModelFactory(input, repo))
                 .get(PickerViewModel::class.java)
+
         viewModel.screenState
             .observeOn(repo.schedulerSharedRepo.mainThread)
             .subscribe {
                 adapter.submitList(it.currencyList)
+            }
+            .addTo(disposableBag)
+
+        adapter.selectedCurrencyCode
+            .subscribe { currencyCode ->
+                setResult(RESULT_OK, Intent().apply { putExtra(RESULT_KEY, currencyCode) })
+                finish()
             }
             .addTo(disposableBag)
         lifecycle.addObserver(viewModel)
@@ -38,5 +48,10 @@ class PickerActivity : DaggerAppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         disposableBag.dispose()
+    }
+
+    companion object {
+        val BASE_OR_TARGET_KEY = "BASE_OR_TARGET_KEY"
+        val RESULT_KEY = "RESULT_KEY"
     }
 }

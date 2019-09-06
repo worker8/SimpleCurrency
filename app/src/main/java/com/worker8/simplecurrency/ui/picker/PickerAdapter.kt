@@ -4,8 +4,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.subjects.PublishSubject
 
 class PickerAdapter : ListAdapter<PickerAdapter.PickerRowType, RecyclerView.ViewHolder>(comparator) {
+    private val clickSubject: PublishSubject<String> = PublishSubject.create()
+    val selectedCurrencyCode = clickSubject.hide()
+
     init {
         setHasStableIds(true)
     }
@@ -16,7 +20,9 @@ class PickerAdapter : ListAdapter<PickerAdapter.PickerRowType, RecyclerView.View
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val pickerRowType = getItem(position)
-        (holder as PickerViewHolder).bind(pickerRowType)
+        (holder as PickerViewHolder).bind(pickerRowType) {
+            clickSubject.onNext(it)
+        }
     }
 
     companion object {
