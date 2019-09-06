@@ -6,8 +6,7 @@ class PickerContract {
     }
 
     data class ScreenState(
-        val currencyList: List<Row>
+        val currencyList: List<PickerAdapter.PickerRowType>
     )
 
-    data class Row(val currencyName: String, val currencyRate: String, val currencyCode: String)
 }

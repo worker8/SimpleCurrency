@@ -2,6 +2,8 @@ package com.worker8.simplecurrency.ui.main
 
 import androidx.lifecycle.*
 import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
+import com.worker8.simplecurrency.extension.toComma
 import com.worker8.simplecurrency.realValue
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -9,10 +11,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.*
 
 class MainViewModel(private val input: MainContract.Input, private val repo: MainRepo) :
     ViewModel(), LifecycleObserver {
@@ -114,7 +112,7 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                     dispatch(
                         currentScreenState.copy(
                             outputNumberString =
-                            outputCurrency.toReadableFormat().addCurrencySymbol('$')
+                            outputCurrency.toTwoDecimalWithComma().addCurrencySymbol('$')
                         )
                     )
                 }
@@ -130,7 +128,7 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
                         currentScreenState.copy(
                             inputNumberString =
                             newInputDouble
-                                .toReadableFormatInput()
+                                .toComma()
                                 .addCurrencySymbol('¥')
                         )
                     )
@@ -141,20 +139,6 @@ class MainViewModel(private val input: MainContract.Input, private val repo: Mai
 
     private fun currentInputString(): String {
         return currentScreenState.inputNumberStringState
-    }
-
-    private fun Double.toReadableFormatInput(): String {
-        val decimalFormat = DecimalFormat("#,###.#######################")
-        decimalFormat.decimalFormatSymbols = DecimalFormatSymbols(Locale.getDefault())
-        val bigDecimal = this.toBigDecimal()
-        return decimalFormat.format(bigDecimal)
-    }
-
-    private fun Double.toReadableFormat(): String {
-        val decimalFormat = DecimalFormat("#,###.##")
-        decimalFormat.decimalFormatSymbols = DecimalFormatSymbols(Locale.getDefault())
-        val bigDecimal = this.toBigDecimal().setScale(2, RoundingMode.HALF_UP)
-        return decimalFormat.format(bigDecimal)
     }
 
     private fun String.addCurrencySymbol(char: Char): String {

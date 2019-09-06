@@ -1,13 +1,18 @@
 package com.worker8.simplecurrency.ui.picker
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
+import com.worker8.simplecurrency.realValue
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 
-class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) : ViewModel(),
-    LifecycleObserver {
+class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
+    ViewModel(), LifecycleObserver {
+    private val screenStateSubject = BehaviorSubject.createDefault(PickerContract.ScreenState(listOf()))
+    val currentScreenState get() = screenStateSubject.realValue
+    var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     private val disposableBag = CompositeDisposable()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -19,21 +24,23 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                 .map {
                     it.map { roomConversionRate ->
                         roomConversionRate.run {
-                            PickerContract.Row(
+                            PickerAdapter.PickerRowType(
                                 currencyName = Currency.ALL.get(getCodeWithoutUSD()) ?: "",
-                                currencyRate = (1 / rate).toString(),
+                                currencyRate = "1 USD = ${(1 / rate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
                                 currencyCode = getCodeWithoutUSD()
                             )
                         }
                     }
                 }
                 .subscribe {
-                    it.forEach {
-                        Log.d("ddw", "row = ${it}")
-                    }
+                    dispatch(currentScreenState.copy(it))
                 }
                 .addTo(disposableBag)
         }
+    }
+
+    fun dispatch(screenState: PickerContract.ScreenState) {
+        screenStateSubject.onNext(screenState)
     }
 
     override fun onCleared() {
