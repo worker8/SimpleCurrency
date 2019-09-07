@@ -2,6 +2,7 @@ package com.worker8.simplecurrency.ui.picker
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProviders
 import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
@@ -32,6 +33,7 @@ class PickerActivity : DaggerAppCompatActivity() {
         viewModel.screenState
             .observeOn(repo.schedulerSharedRepo.mainThread)
             .subscribe {
+                Log.d("ddw", "submitList, size = ${it.currencyList.size}")
                 adapter.submitList(it.currencyList)
             }
             .addTo(disposableBag)

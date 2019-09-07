@@ -25,6 +25,8 @@ class PickerAdapter : ListAdapter<PickerAdapter.PickerRowType, RecyclerView.View
         }
     }
 
+    override fun getItemId(position: Int) = getItem(position).currencyCode.hashCode().toLong()
+
     companion object {
         val comparator = object : DiffUtil.ItemCallback<PickerRowType>() {
             override fun areItemsTheSame(oldItem: PickerRowType, newItem: PickerRowType): Boolean {

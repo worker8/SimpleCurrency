@@ -18,8 +18,8 @@ interface RoomConversionRateDao : BaseDao<RoomConversionRate> {
     @Query("SELECT * FROM RoomConversionRate")
     fun getRoomConversionRateList(): List<RoomConversionRate>
 
-    @Query("SELECT * FROM RoomConversionRate")
-    fun getRoomConversionRateFlowable(): Flowable<List<RoomConversionRate>>
+    @Query("SELECT * FROM RoomConversionRate WHERE code like :currencyCode")
+    fun getRoomConversionRateFlowable(currencyCode: String): Flowable<List<RoomConversionRate>>
 
     @Query("SELECT * FROM RoomConversionRate WHERE code=:currencyCode")
     fun findConversionRateFlowable(currencyCode: String): Flowable<List<RoomConversionRate>>

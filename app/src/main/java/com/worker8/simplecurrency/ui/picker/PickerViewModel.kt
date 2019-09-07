@@ -1,5 +1,6 @@
 package com.worker8.simplecurrency.ui.picker
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.addTo
@@ -22,6 +23,7 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                 .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
                 .observeOn(repo.schedulerSharedRepo.backgroundThread)
                 .map {
+                    Log.d("ddw", "size = ${it.size}")
                     it.map { roomConversionRate ->
                         roomConversionRate.run {
                             PickerAdapter.PickerRowType(
@@ -36,16 +38,6 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                     dispatch(currentScreenState.copy(it))
                 }
                 .addTo(disposableBag)
-
-//            selectedCurrencyCode
-//                .subscribe {
-//                    if (isBase) {
-//                        repo.setSelectedBaseCurrencyCode(it)
-//                    } else {
-//                        repo.setSelectedTargetCurrencyCode(it)
-//                    }
-//                }
-//                .addTo(disposableBag)
         }
     }
 
