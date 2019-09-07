@@ -3,7 +3,6 @@ package com.worker8.simplecurrency.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
 import com.worker8.simplecurrency.R
@@ -69,6 +68,8 @@ class MainActivity : DaggerAppCompatActivity() {
         viewModel.screenState
             .subscribe {
                 it.apply {
+                    mainInputCurrency.text = baseCurrencyCode
+                    mainOutputCurrency.text = targetCurrencyCode
                     mainInputNumber.text = inputNumberString
                     mainOutputNumber.text = outputNumberString
                     mainNumDot.isEnabled = isEnableDot

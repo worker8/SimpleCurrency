@@ -11,6 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 class MainViewModel(private val repo: MainRepo) :
     ViewModel(), LifecycleObserver {
@@ -24,7 +25,7 @@ class MainViewModel(private val repo: MainRepo) :
     lateinit var concatObsShared: Observable<String>
     lateinit var seedObsShared: Observable<Boolean>
     lateinit var backSpaceObsShared: Observable<String>
-
+    private val refreshSubject: PublishSubject<String> = PublishSubject.create()
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         disposableBag.clear()
@@ -61,7 +62,11 @@ class MainViewModel(private val repo: MainRepo) :
     private fun refreshCalculateStream() {
         calculateDisposableBag.clear()
         val calculateObsShared = Flowable.combineLatest(
-            Observable.merge(concatObsShared, backSpaceObsShared).toFlowable(BackpressureStrategy.LATEST),
+            Observable.merge(
+                concatObsShared,
+                backSpaceObsShared,
+                refreshSubject
+            ).toFlowable(BackpressureStrategy.LATEST),
             seedObsShared.subscribeOn(repo.schedulerSharedRepo.backgroundThread).toFlowable(BackpressureStrategy.DROP).flatMap { repo.getLatestSelectedRateFlowable() },
             BiFunction<String, Double, Result<Pair<Double, Double>>> { numberString, rate ->
                 val dotRemoved = if (numberString.isNotEmpty() && numberString.last() == '.') {
@@ -88,12 +93,15 @@ class MainViewModel(private val repo: MainRepo) :
             .subscribe { (input, outputCurrency) ->
                 dispatch(
                     currentScreenState.copy(
+                        baseCurrencyCode = repo.getSelectedBaseCurrencyCode(),
+                        targetCurrencyCode = repo.getSelectedTargetCurrencyCode(),
                         inputNumberString = input.toComma().addCurrencySymbol('¥'),
                         outputNumberString = outputCurrency.toTwoDecimalWithComma().addCurrencySymbol('$')
                     )
                 )
             }
             .addTo(calculateDisposableBag)
+        refreshSubject.onNext(currentInputString())
     }
 
     fun setupInputEvents() {
@@ -130,9 +138,11 @@ class MainViewModel(private val repo: MainRepo) :
                     }
                 }
                 .share()
+
         seedObsShared =
             repo.populateDbIfFirstTime()
                 .share()
+
         backSpaceObsShared =
             input.backSpaceClick.map {
                 if (currentInputString().isEmpty() || currentInputString() == "0") {

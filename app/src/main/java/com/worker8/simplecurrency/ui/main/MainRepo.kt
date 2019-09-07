@@ -1,7 +1,6 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.content.Context
-import android.util.Log
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
 import com.worker8.simplecurrency.common.MainPreference
@@ -37,10 +36,10 @@ class MainRepo @Inject constructor(
         }
     }
 
-    fun getSelectedBaseCurrencyCode(context: Context) =
+    fun getSelectedBaseCurrencyCode() =
         MainPreference.getSelectedBaseCurrencyCode(context)
 
-    fun getSelectedTargetCurrencyCode(context: Context) =
+    fun getSelectedTargetCurrencyCode() =
         MainPreference.getSelectedTargetCurrencyCode(context)
 
     fun setSelectedBaseCurrencyCode(currencyCode: String) =
@@ -50,12 +49,12 @@ class MainRepo @Inject constructor(
         MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 
     fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
-        val baseCurrency = getSelectedBaseCurrencyCode(context) // "JPY"
+        val baseCurrency = getSelectedBaseCurrencyCode() // "JPY"
         return db.roomConversionRateDao().findConversionRateFlowable("USD${baseCurrency}")
     }
 
     fun getTargetRateFlowable(): Flowable<List<RoomConversionRate>> {
-        val targetCurrency = getSelectedTargetCurrencyCode(context) // "JPY"
+        val targetCurrency = getSelectedTargetCurrencyCode() // "JPY"
         return db.roomConversionRateDao().findConversionRateFlowable("USD${targetCurrency}")
     }
 

@@ -24,6 +24,8 @@ class MainContract {
         val inputNumberStringState: String = "0",
         val inputNumberString: String = "0",
         val outputNumberString: String = "0",
+        val baseCurrencyCode: String = "",
+        val targetCurrencyCode: String = "",
         val isEnableDot: Boolean = true
     )
 }
