@@ -3,6 +3,7 @@ package com.worker8.simplecurrency.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
 import com.worker8.simplecurrency.R
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
     private val disposableBag = CompositeDisposable()
-    lateinit var input: MainContract.Input
+//    lateinit var input: MainContract.Input
 
     private val onBaseCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
     private val onTargetCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
@@ -29,7 +30,9 @@ class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        input = object : MainContract.Input {
+        setContentView(R.layout.activity_main)
+
+        val mainInput = object : MainContract.Input {
             override val onBaseCurrencyChanged = onBaseCurrencyChangedSubject.hide()
             override val onTargetCurrencyChanged = onTargetCurrencyChangedSubject.hide()
             override val onNumpad0Click by lazy { mainNum0.clicks().map { '0' } }
@@ -45,10 +48,11 @@ class MainActivity : DaggerAppCompatActivity() {
             override val backSpaceClick by lazy { mainNumBackspace.clicks() }
             override val dotClick by lazy { mainNumDot.clicks().map { '.' } }
         }
-        setContentView(R.layout.activity_main)
         val viewModel =
-            ViewModelProviders.of(this, MainViewModel.MainViewModelFactory(input, repo))
-                .get(MainViewModel::class.java)
+            ViewModelProviders.of(this, MainViewModel.MainViewModelFactory(repo))
+                .get(MainViewModel::class.java).apply {
+                    input = mainInput
+                }
         lifecycle.addObserver(viewModel)
         mainBaseCurrencyPicker.setOnClickListener {
             val intent = Intent(this@MainActivity, PickerActivity::class.java)

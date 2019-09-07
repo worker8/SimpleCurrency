@@ -12,7 +12,7 @@ class MainPreference {
             context.defaultPrefs().save(FIRST_TIME, false)
 
         fun getFirstTime(context: Context) =
-            context.defaultPrefs().get(TARGET_CURRENCY, true)
+            context.defaultPrefs().get(FIRST_TIME, true)
 
         fun setSelectedBaseCurrencyCode(context: Context, currencyCode: String) =
             context.defaultPrefs().save(BASE_CURRENCY, currencyCode)

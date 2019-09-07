@@ -50,13 +50,13 @@ class MainRepo @Inject constructor(
         MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 
     fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
-        val base = getSelectedBaseCurrencyCode(context) // "JPY"
-        return db.roomConversionRateDao().findConversionRateFlowable("USD${base}")
+        val baseCurrency = getSelectedBaseCurrencyCode(context) // "JPY"
+        return db.roomConversionRateDao().findConversionRateFlowable("USD${baseCurrency}")
     }
 
     fun getTargetRateFlowable(): Flowable<List<RoomConversionRate>> {
-        val target = getSelectedTargetCurrencyCode(context) // "JPY"
-        return db.roomConversionRateDao().findConversionRateFlowable("USD${target}")
+        val targetCurrency = getSelectedTargetCurrencyCode(context) // "JPY"
+        return db.roomConversionRateDao().findConversionRateFlowable("USD${targetCurrency}")
     }
 
     fun getLatestSelectedRateFlowable(): Flowable<Double> {
@@ -69,7 +69,6 @@ class MainRepo @Inject constructor(
                 } else {
                     -1.0
                 }
-                Log.d("ddw", "rate: " + rate)
                 return@BiFunction rate
             })
     }

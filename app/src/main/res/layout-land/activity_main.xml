@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@id/mainGuideline2"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +22,7 @@
         android:layout_height="0dp"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@id/mainGuideline4"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mainGuideline2" />
 
@@ -73,7 +73,7 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toEndOf="@id/mainInputCurrency"
         app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
 
@@ -137,7 +137,7 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toEndOf="@id/mainOutputCurrency"
         app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
 
@@ -146,7 +146,7 @@
         android:layout_height="1dp"
         android:background="@color/white30"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline2"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/mainGuideline2" />
 
@@ -155,28 +155,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
+        app:layout_constraintGuide_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/mainGuideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/mainGuideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
+        app:layout_constraintGuide_percent="0.75"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/mainGuideline4"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
+        app:layout_constraintGuide_percent="1"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         layout="@layout/numpad"
@@ -184,7 +192,14 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mainGuideline4" />
+        app:layout_constraintStart_toStartOf="@id/mainGuidelineHorizontal"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainGuidelineHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

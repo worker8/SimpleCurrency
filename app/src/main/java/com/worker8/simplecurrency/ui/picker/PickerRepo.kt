@@ -16,4 +16,9 @@ class PickerRepo @Inject constructor(
     fun getAllCurrenciesFromDb() =
         db.roomConversionRateDao().getRoomConversionRateFlowable()
 
+    fun setSelectedBaseCurrencyCode(currencyCode: String) =
+        MainPreference.setSelectedBaseCurrencyCode(context, currencyCode)
+
+    fun setSelectedTargetCurrencyCode(currencyCode: String) =
+        MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 }
