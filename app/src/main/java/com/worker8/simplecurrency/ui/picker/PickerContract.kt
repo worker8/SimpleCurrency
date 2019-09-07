@@ -11,6 +11,7 @@ class PickerContract {
     }
 
     data class ScreenState(
-        val currencyList: List<PickerAdapter.PickerRowType>
+        val currencyList: List<PickerAdapter.PickerRowType>,
+        val rateDetailVisibility: Boolean
     )
 }

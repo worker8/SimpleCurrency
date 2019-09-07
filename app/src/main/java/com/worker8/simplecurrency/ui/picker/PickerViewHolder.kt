@@ -9,11 +9,20 @@ import kotlinx.android.synthetic.main.row_picker.view.*
 
 class PickerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(pickerRowType: PickerAdapter.PickerRowType, callback: (String) -> Unit) {
+    fun bind(
+        pickerRowType: PickerAdapter.PickerRowType,
+        isBase: Boolean,
+        callback: (String) -> Unit
+    ) {
         itemView.apply {
             pickerCurrencyName.text = pickerRowType.currencyName
             pickerCurrencyRate.text = pickerRowType.currencyRate
             pickerCurrencyCode.text = pickerRowType.currencyCode
+            pickerCurrencyRate.visibility = if (isBase) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
             setOnClickListener { callback.invoke(pickerRowType.currencyCode) }
         }
     }

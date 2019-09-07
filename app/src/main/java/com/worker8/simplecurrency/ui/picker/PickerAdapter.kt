@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.subjects.PublishSubject
 
-class PickerAdapter : ListAdapter<PickerAdapter.PickerRowType, RecyclerView.ViewHolder>(comparator) {
+class PickerAdapter(val isBase: Boolean) :
+    ListAdapter<PickerAdapter.PickerRowType, RecyclerView.ViewHolder>(comparator) {
     private val clickSubject: PublishSubject<String> = PublishSubject.create()
     val selectedCurrencyCode = clickSubject.hide()
 
@@ -20,7 +21,7 @@ class PickerAdapter : ListAdapter<PickerAdapter.PickerRowType, RecyclerView.View
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val pickerRowType = getItem(position)
-        (holder as PickerViewHolder).bind(pickerRowType) {
+        (holder as PickerViewHolder).bind(pickerRowType, isBase) {
             clickSubject.onNext(it)
         }
     }
@@ -33,11 +34,18 @@ class PickerAdapter : ListAdapter<PickerAdapter.PickerRowType, RecyclerView.View
                 return oldItem.currencyCode == newItem.currencyCode
             }
 
-            override fun areContentsTheSame(oldItem: PickerRowType, newItem: PickerRowType): Boolean {
+            override fun areContentsTheSame(
+                oldItem: PickerRowType,
+                newItem: PickerRowType
+            ): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
-    data class PickerRowType(val currencyCode: String, val currencyName: String, val currencyRate: String)
+    data class PickerRowType(
+        val currencyCode: String,
+        val currencyName: String,
+        val currencyRate: String
+    )
 }

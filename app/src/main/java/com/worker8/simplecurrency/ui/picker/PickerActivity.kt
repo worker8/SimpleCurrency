@@ -17,8 +17,10 @@ class PickerActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var repo: PickerRepo
     lateinit var input: PickerContract.Input
-    val adapter = PickerAdapter()
+    val adapter by lazy { PickerAdapter(isBase) }
     private val disposableBag = CompositeDisposable()
+
+    val isBase get() = intent.getBooleanExtra(BASE_OR_TARGET_KEY, true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +28,9 @@ class PickerActivity : DaggerAppCompatActivity() {
 
         input = object : PickerContract.Input {
             override val onFilterTextChanged =
-                pickerInput.textChanges().map { it.toString() }.toFlowable(BackpressureStrategy.LATEST)
-            override val isBase = intent.getBooleanExtra(BASE_OR_TARGET_KEY, true)
+                pickerInput.textChanges().map { it.toString() }
+                    .toFlowable(BackpressureStrategy.LATEST)
+            override val isBase = this@PickerActivity.isBase
         }
         pickerRecyclerView.adapter = adapter
         val viewModel =
@@ -36,9 +39,10 @@ class PickerActivity : DaggerAppCompatActivity() {
 
         viewModel.screenState
             .observeOn(repo.schedulerSharedRepo.mainThread)
-            .subscribe {
-                Log.d("ddw", "submitList, size = ${it.currencyList.size}")
-                adapter.submitList(it.currencyList)
+            .subscribe { screenState ->
+                screenState.apply {
+                    adapter.submitList(currencyList)
+                }
             }
             .addTo(disposableBag)
 

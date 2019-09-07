@@ -14,7 +14,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
     ViewModel(), LifecycleObserver {
-    private val screenStateSubject = BehaviorSubject.createDefault(PickerContract.ScreenState(listOf()))
+    private val screenStateSubject = BehaviorSubject.createDefault(PickerContract.ScreenState(listOf(), false))
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     private val disposableBag = CompositeDisposable()
@@ -42,6 +42,8 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                     dispatch(currentScreenState.copy(it))
                 }
                 .addTo(disposableBag)
+
+            dispatch(currentScreenState.copy(rateDetailVisibility = !isBase))
         }
     }
 
