@@ -6,6 +6,9 @@ import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.addTo
 import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.realValue
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -19,7 +22,8 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
-            repo.getAllCurrenciesFromDb()
+            Flowable.merge(Observable.just("").toFlowable(BackpressureStrategy.DROP), onFilterTextChanged)
+                .flatMap { repo.getAllCurrenciesFromDb(it) }
                 .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
                 .observeOn(repo.schedulerSharedRepo.backgroundThread)
                 .map {

@@ -13,8 +13,8 @@ class PickerRepo @Inject constructor(
     val db: SimpleCurrencyDatabase,
     val schedulerSharedRepo: SchedulerSharedRepo
 ) {
-    fun getAllCurrenciesFromDb() =
-        db.roomConversionRateDao().getRoomConversionRateFlowable("%USD%")
+    fun getAllCurrenciesFromDb(searchText: String) =
+        db.roomConversionRateDao().getRoomConversionRateFlowable("%USD${searchText}%")
 
     fun setSelectedBaseCurrencyCode(currencyCode: String) =
         MainPreference.setSelectedBaseCurrencyCode(context, currencyCode)

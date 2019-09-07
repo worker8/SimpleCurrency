@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProviders
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
 import dagger.android.support.DaggerAppCompatActivity
+import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_picker.*
 import javax.inject.Inject
@@ -23,6 +25,8 @@ class PickerActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_picker)
 
         input = object : PickerContract.Input {
+            override val onFilterTextChanged =
+                pickerInput.textChanges().map { it.toString() }.toFlowable(BackpressureStrategy.LATEST)
             override val isBase = intent.getBooleanExtra(BASE_OR_TARGET_KEY, true)
         }
         pickerRecyclerView.adapter = adapter
