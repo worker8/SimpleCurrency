@@ -32,6 +32,7 @@ class MainActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val mainInput = object : MainContract.Input {
+            override val swapButtonClick = mainFab.clicks()
             override val onBaseCurrencyChanged = onBaseCurrencyChangedSubject.hide()
             override val onTargetCurrencyChanged = onTargetCurrencyChangedSubject.hide()
             override val onNumpad0Click by lazy { mainNum0.clicks().map { '0' } }

@@ -36,7 +36,6 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding:$Versions.App.rxBinding"
     implementation "com.jakewharton.threetenabp:threetenabp:$Versions.App.threeTenABP"
 
-
     /* UI */
     implementation "androidx.constraintlayout:constraintlayout:$Versions.App.constraintLayout"
     implementation "com.google.android.material:material:$Versions.App.material"

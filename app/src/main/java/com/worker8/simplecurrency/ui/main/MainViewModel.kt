@@ -50,7 +50,7 @@ class MainViewModel(private val repo: MainRepo) :
 
     fun processOutputEvents() {
         Observable.merge(newNumberInputSharedObservable, backSpaceInputEventSharedObservable)
-            .subscribe { newInputString ->
+            .subscribe({ newInputString ->
                 dispatch(
                     currentScreenState.copy(
                         inputNumberString = formatInput(newInputString),
@@ -58,7 +58,9 @@ class MainViewModel(private val repo: MainRepo) :
                         isEnableDot = !newInputString.contains(".")
                     )
                 )
-            }
+            }, {
+                it.printStackTrace()
+            })
             .addTo(disposableBag)
 
         input.onBaseCurrencyChanged
@@ -90,15 +92,7 @@ class MainViewModel(private val repo: MainRepo) :
                 )
             }
             .addTo(calculateDisposableBag)
-//        newNumberInputSharedObservable
-//            .subscribe {
-//                dispatch(
-//                    currentScreenState.copy(
-//                        inputNumberString = it
-//                    )
-//                )
-//            }
-//            .addTo(calculateDisposableBag)
+
         onTargetCurrencyClickedShared
             .subscribeOn(repo.schedulerSharedRepo.mainThread)
             .withLatestFrom(calculateConversionRateSharedObservable,
@@ -110,6 +104,15 @@ class MainViewModel(private val repo: MainRepo) :
             .subscribe { viewAction.navigateToSelectTargetCurrency(it) }
             .addTo(calculateDisposableBag)
 
+        input.swapButtonClick
+            .subscribe {
+                val tempBaseCode = repo.getSelectedBaseCurrencyCode()
+                val tempTargetCode = repo.getSelectedTargetCurrencyCode()
+                repo.setSelectedBaseCurrencyCode(tempTargetCode)
+                repo.setSelectedTargetCurrencyCode(tempBaseCode)
+                onCreate()
+            }
+            .addTo(calculateDisposableBag)
         repo.setupPeriodicUpdate()
     }
 
