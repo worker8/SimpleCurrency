@@ -32,7 +32,7 @@ class MainViewModel(private val repo: MainRepo) :
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        disposableBag.clear()
+
         setupInputEvents()
 
         input.apply {
@@ -63,69 +63,9 @@ class MainViewModel(private val repo: MainRepo) :
         }
     }
 
-    private fun refreshCalculateStream() {
-        calculateDisposableBag.clear()
-        val calculateObsShared = Flowable.combineLatest(
-            Observable.merge(
-                concatObsShared,
-                backSpaceObsShared,
-                refreshSubject
-            ).toFlowable(BackpressureStrategy.LATEST),
-            seedObsShared.subscribeOn(repo.schedulerSharedRepo.backgroundThread)
-                .toFlowable(BackpressureStrategy.DROP)
-                .flatMap { repo.getLatestSelectedRateFlowable() },
-            BiFunction<String, Double, Result<Pair<Double, Double>>> { numberString, rate ->
-                val dotRemoved = if (numberString.isNotEmpty() && numberString.last() == '.') {
-                    numberString.removeRange(
-                        numberString.length - 1,
-                        numberString.length
-                    )
-                } else {
-                    numberString
-                }
-                val input = dotRemoved.toDoubleOrNull()
-                return@BiFunction if (input != null) {
-                    Result.success(input to rate)
-                } else {
-                    Result.failure(Exception())
-                }
-            }).share()
-
-        calculateObsShared
-            .map { result ->
-                val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
-                input to input * rate
-            }
-            .subscribe { (input, outputCurrency) ->
-                dispatch(
-                    currentScreenState.copy(
-                        baseCurrencyCode = repo.getSelectedBaseCurrencyCode(),
-                        targetCurrencyCode = repo.getSelectedTargetCurrencyCode(),
-                        inputNumberString = input.toComma().addCurrencySymbol('¥'),
-                        outputNumberString = outputCurrency.toTwoDecimalWithComma().addCurrencySymbol(
-                            '$'
-                        )
-                    )
-                )
-            }
-            .addTo(calculateDisposableBag)
-
-        onTargetCurrencyClickedShared.toFlowable(BackpressureStrategy.LATEST)
-            .subscribeOn(repo.schedulerSharedRepo.mainThread)
-            .withLatestFrom(calculateObsShared.doOnNext { Log.d("ddw", "2") },
-                BiFunction<Unit, Result<Pair<Double, Double>>, Double> { _, result ->
-                    val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
-                    input
-                })
-            .observeOn(repo.schedulerSharedRepo.mainThread)
-            .subscribe {
-                viewAction.navigateToSelectTargetCurrency(it)
-            }
-            .addTo(calculateDisposableBag)
-        refreshSubject.onNext(currentInputString())
-    }
-
     fun setupInputEvents() {
+        disposableBag.clear()
+        calculateDisposableBag.clear()
         onTargetCurrencyClickedShared = input.onTargetCurrencyClicked.share()
         concatObsShared =
             Observable.merge(
@@ -178,17 +118,66 @@ class MainViewModel(private val repo: MainRepo) :
                     )
                 }
             }.share()
-        refreshCalculateStream()
+        val calculateObsShared = Flowable.combineLatest(
+            Observable.merge(
+                concatObsShared,
+                backSpaceObsShared,
+                refreshSubject
+            ).toFlowable(BackpressureStrategy.LATEST),
+            seedObsShared.subscribeOn(repo.schedulerSharedRepo.backgroundThread)
+                .toFlowable(BackpressureStrategy.DROP)
+                .flatMap { repo.getLatestSelectedRateFlowable() },
+            BiFunction<String, Double, Result<Pair<Double, Double>>> { numberString, rate ->
+                val dotRemoved = if (numberString.isNotEmpty() && numberString.last() == '.') {
+                    numberString.removeRange(
+                        numberString.length - 1,
+                        numberString.length
+                    )
+                } else {
+                    numberString
+                }
+                val input = dotRemoved.toDoubleOrNull()
+                return@BiFunction if (input != null) {
+                    Result.success(input to rate)
+                } else {
+                    Result.failure(Exception())
+                }
+            }).share()
+
+        calculateObsShared
+            .map { result ->
+                val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
+                input to input * rate
+            }
+            .subscribe { (input, outputCurrency) ->
+                dispatch(
+                    currentScreenState.copy(
+                        baseCurrencyCode = repo.getSelectedBaseCurrencyCode(),
+                        targetCurrencyCode = repo.getSelectedTargetCurrencyCode(),
+                        inputNumberString = input.toComma(),
+                        outputNumberString = outputCurrency.toTwoDecimalWithComma()
+                    )
+                )
+            }
+            .addTo(calculateDisposableBag)
+
+        onTargetCurrencyClickedShared.toFlowable(BackpressureStrategy.LATEST)
+            .subscribeOn(repo.schedulerSharedRepo.mainThread)
+            .withLatestFrom(calculateObsShared.doOnNext { Log.d("ddw", "2") },
+                BiFunction<Unit, Result<Pair<Double, Double>>, Double> { _, result ->
+                    val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
+                    input
+                })
+            .observeOn(repo.schedulerSharedRepo.mainThread)
+            .subscribe {
+                viewAction.navigateToSelectTargetCurrency(it)
+            }
+            .addTo(calculateDisposableBag)
+        refreshSubject.onNext(currentInputString())
     }
 
     private fun currentInputString(): String {
         return currentScreenState.inputNumberStringState
-    }
-
-    private fun String.addCurrencySymbol(char: Char): String {
-        // TODO: API is not returning symbol, need to map it externally (not doing anything now)
-        return this
-        // return "${char} ${this}"
     }
 
     override fun onCleared() {
