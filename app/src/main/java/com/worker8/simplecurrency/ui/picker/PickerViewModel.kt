@@ -14,7 +14,8 @@ import io.reactivex.subjects.BehaviorSubject
 
 class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
     ViewModel(), LifecycleObserver {
-    private val screenStateSubject = BehaviorSubject.createDefault(PickerContract.ScreenState(listOf(), false))
+    private val screenStateSubject =
+        BehaviorSubject.createDefault(PickerContract.ScreenState(listOf(), false))
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     private val disposableBag = CompositeDisposable()
@@ -22,17 +23,25 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
-            Flowable.merge(Observable.just("").toFlowable(BackpressureStrategy.DROP), onFilterTextChanged)
+            Flowable.merge(
+                Flowable.just(""),
+                onFilterTextChanged
+            )
                 .flatMap { repo.getAllCurrenciesFromDb(it) }
                 .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
                 .observeOn(repo.schedulerSharedRepo.backgroundThread)
-                .map {
-                    Log.d("ddw", "size = ${it.size}")
-                    it.map { roomConversionRate ->
+                .map { it to repo.getBaseRate() }
+                .map { (filteredCurrencyRates, baseCurrencyList) ->
+                    val baseCurrency = baseCurrencyList.get(0).rate
+                    filteredCurrencyRates.map { roomConversionRate ->
                         roomConversionRate.run {
+                            Log.d("ddw", "rate: ${rate}, baseCurrency: ${baseCurrency}")
+                            val baseToTargetRate = (rate / baseCurrency)
+                            Log.d("ddw", "baseToTargetRate: ${baseToTargetRate}")
                             PickerAdapter.PickerRowType(
                                 currencyName = Currency.ALL.get(getCodeWithoutUSD()) ?: "",
-                                currencyRate = "1 ${getCodeWithoutUSD()} = ${(1 / rate).toTwoDecimalWithComma()} USD",
+                                currencyRate = "1 ${repo.getSelectedBaseCurrencyCode()} = ${rate.toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
+                                currencyRateCalculated = "${inputAmount} ${repo.getSelectedBaseCurrencyCode()} = ${(inputAmount * baseToTargetRate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
                                 currencyCode = getCodeWithoutUSD()
                             )
                         }

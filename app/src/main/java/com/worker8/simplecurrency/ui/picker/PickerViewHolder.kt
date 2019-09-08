@@ -18,11 +18,14 @@ class PickerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             pickerCurrencyName.text = pickerRowType.currencyName
             pickerCurrencyRate.text = pickerRowType.currencyRate
             pickerCurrencyCode.text = pickerRowType.currencyCode
-            pickerCurrencyRate.visibility = if (isBase) {
+            pickerCurrencyRateCalculated.text = pickerRowType.currencyRateCalculated
+            val rateVisibility = if (isBase) {
                 View.GONE
             } else {
                 View.VISIBLE
             }
+            pickerCurrencyRate.visibility = rateVisibility
+            pickerCurrencyRateCalculated.visibility = rateVisibility
             setOnClickListener { callback.invoke(pickerRowType.currencyCode) }
         }
     }

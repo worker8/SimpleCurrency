@@ -8,6 +8,7 @@ class PickerContract {
     interface Input {
         val isBase: Boolean
         val onFilterTextChanged: Flowable<String>
+        val inputAmount: Double
     }
 
     data class ScreenState(

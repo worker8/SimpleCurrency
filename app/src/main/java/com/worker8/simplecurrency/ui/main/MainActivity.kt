@@ -9,6 +9,7 @@ import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
 import com.worker8.simplecurrency.ui.picker.PickerActivity
 import dagger.android.support.DaggerAppCompatActivity
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
@@ -46,11 +47,23 @@ class MainActivity : DaggerAppCompatActivity() {
             override val onNumpad9Click by lazy { mainNum9.clicks().map { '9' } }
             override val backSpaceClick by lazy { mainNumBackspace.clicks() }
             override val dotClick by lazy { mainNumDot.clicks().map { '.' } }
+            override val onTargetCurrencyClicked by lazy { mainTargetCurrencyPicker.clicks() }
+        }
+        val viewActionLocal = object : MainContract.ViewAction {
+            override fun navigateToSelectTargetCurrency(inputAmount: Double) {
+                val intent = Intent(this@MainActivity, PickerActivity::class.java)
+                    .apply {
+                        putExtra(PickerActivity.BASE_OR_TARGET_KEY, false)
+                        putExtra(PickerActivity.INPUT_AMOUNT, inputAmount)
+                    }
+                startActivityForResult(intent, PICKER_TARGET_REQUEST_CODE)
+            }
         }
         val viewModel =
             ViewModelProviders.of(this, MainViewModel.MainViewModelFactory(repo))
                 .get(MainViewModel::class.java).apply {
                     input = mainInput
+                    viewAction = viewActionLocal
                 }
         lifecycle.addObserver(viewModel)
         mainBaseCurrencyPicker.setOnClickListener {
@@ -59,11 +72,14 @@ class MainActivity : DaggerAppCompatActivity() {
             startActivityForResult(intent, PICKER_BASE_REQUEST_CODE)
         }
 
-        mainTargetCurrencyPicker.setOnClickListener {
-            val intent = Intent(this@MainActivity, PickerActivity::class.java)
-                .apply { putExtra(PickerActivity.BASE_OR_TARGET_KEY, false) }
-            startActivityForResult(intent, PICKER_TARGET_REQUEST_CODE)
-        }
+//        mainTargetCurrencyPicker.setOnClickListener {
+//            val intent = Intent(this@MainActivity, PickerActivity::class.java)
+//                .apply {
+//                    putExtra(PickerActivity.BASE_OR_TARGET_KEY, false)
+//                    putExtra(PickerActivity.INPUT_AMOUNT, 1000.0)
+//                }
+//            startActivityForResult(intent, PICKER_TARGET_REQUEST_CODE)
+//        }
 
         viewModel.screenState
             .subscribe {

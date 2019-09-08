@@ -18,6 +18,11 @@ class MainContract {
         val dotClick: Observable<Char>
         val onBaseCurrencyChanged: Observable<String>
         val onTargetCurrencyChanged: Observable<String>
+        val onTargetCurrencyClicked: Observable<Unit>
+    }
+
+    interface ViewAction {
+        fun navigateToSelectTargetCurrency(inputAmount: Double)
     }
 
     data class ScreenState(

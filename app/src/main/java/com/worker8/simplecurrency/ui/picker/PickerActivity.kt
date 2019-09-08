@@ -21,12 +21,14 @@ class PickerActivity : DaggerAppCompatActivity() {
     private val disposableBag = CompositeDisposable()
 
     val isBase get() = intent.getBooleanExtra(BASE_OR_TARGET_KEY, true)
+    val inputAmount get() = intent.getDoubleExtra(INPUT_AMOUNT, 0.0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picker)
 
         input = object : PickerContract.Input {
+            override val inputAmount = this@PickerActivity.inputAmount
             override val onFilterTextChanged =
                 pickerInput.textChanges().map { it.toString() }
                     .toFlowable(BackpressureStrategy.LATEST)
@@ -61,6 +63,7 @@ class PickerActivity : DaggerAppCompatActivity() {
     }
 
     companion object {
+        val INPUT_AMOUNT = "INPUT_AMOUNT"
         val BASE_OR_TARGET_KEY = "BASE_OR_TARGET_KEY"
         val RESULT_KEY = "RESULT_KEY"
     }

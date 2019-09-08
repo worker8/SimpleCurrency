@@ -46,6 +46,7 @@ class PickerAdapter(val isBase: Boolean) :
     data class PickerRowType(
         val currencyCode: String,
         val currencyName: String,
-        val currencyRate: String
+        val currencyRate: String,
+        val currencyRateCalculated: String
     )
 }

@@ -1,5 +1,6 @@
 package com.worker8.simplecurrency.ui.main
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.worker8.simplecurrency.addTo
 import com.worker8.simplecurrency.extension.toComma
@@ -22,6 +23,7 @@ class MainViewModel(private val repo: MainRepo) :
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
 
     lateinit var input: MainContract.Input
+    lateinit var viewAction: MainContract.ViewAction
     lateinit var concatObsShared: Observable<String>
     lateinit var seedObsShared: Observable<Boolean>
     lateinit var backSpaceObsShared: Observable<String>
@@ -59,6 +61,7 @@ class MainViewModel(private val repo: MainRepo) :
         }
     }
 
+    var uglyInput = 0.0
     private fun refreshCalculateStream() {
         calculateDisposableBag.clear()
         val calculateObsShared = Flowable.combineLatest(
@@ -67,7 +70,9 @@ class MainViewModel(private val repo: MainRepo) :
                 backSpaceObsShared,
                 refreshSubject
             ).toFlowable(BackpressureStrategy.LATEST),
-            seedObsShared.subscribeOn(repo.schedulerSharedRepo.backgroundThread).toFlowable(BackpressureStrategy.DROP).flatMap { repo.getLatestSelectedRateFlowable() },
+            seedObsShared.subscribeOn(repo.schedulerSharedRepo.backgroundThread).toFlowable(
+                BackpressureStrategy.DROP
+            ).flatMap { repo.getLatestSelectedRateFlowable() },
             BiFunction<String, Double, Result<Pair<Double, Double>>> { numberString, rate ->
                 val dotRemoved = if (numberString.isNotEmpty() && numberString.last() == '.') {
                     numberString.removeRange(
@@ -78,6 +83,8 @@ class MainViewModel(private val repo: MainRepo) :
                     numberString
                 }
                 val input = dotRemoved.toDoubleOrNull()
+                uglyInput = input ?: 0.0
+                Log.d("ddw", "original input: ${input}")
                 return@BiFunction if (input != null) {
                     Result.success(input to rate)
                 } else {
@@ -96,11 +103,42 @@ class MainViewModel(private val repo: MainRepo) :
                         baseCurrencyCode = repo.getSelectedBaseCurrencyCode(),
                         targetCurrencyCode = repo.getSelectedTargetCurrencyCode(),
                         inputNumberString = input.toComma().addCurrencySymbol('¥'),
-                        outputNumberString = outputCurrency.toTwoDecimalWithComma().addCurrencySymbol('$')
+                        outputNumberString = outputCurrency.toTwoDecimalWithComma().addCurrencySymbol(
+                            '$'
+                        )
                     )
                 )
             }
             .addTo(calculateDisposableBag)
+//        Flowable.combineLatest(
+//            calculateObsShared,
+//            input.onTargetCurrencyClicked.toFlowable(BackpressureStrategy.LATEST),
+//            BiFunction<Result<Pair<Double, Double>>, Unit, Double> { result, _ ->
+//                Log.d("ddw", "result: ${result}")
+//                val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
+//                Log.d("ddw", "input: ${input}")
+//                input
+//            })
+
+        input.onTargetCurrencyClicked
+            .subscribeOn(repo.schedulerSharedRepo.mainThread)
+//            .flatMap { calculateObsShared.toObservable() }
+//            .map {
+////                val (input, rate) = it.getOrDefault(Pair(0.0, 0.0))
+//                uglyInput
+//            }
+//            .withLatestFrom(calculateObsShared.toObservable(),
+//                BiFunction<Unit, Result<Pair<Double, Double>>, Double> { _, result ->
+//                    Log.d("ddw", "clicked! ^3^")
+//                    val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
+//                    input
+//                })
+            .observeOn(repo.schedulerSharedRepo.mainThread)
+            .subscribe {
+                viewAction.navigateToSelectTargetCurrency(uglyInput)
+            }
+            .addTo(calculateDisposableBag)
+
         refreshSubject.onNext(currentInputString())
     }
 
