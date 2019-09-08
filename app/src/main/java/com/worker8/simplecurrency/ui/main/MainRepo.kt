@@ -1,9 +1,7 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.content.Context
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.WorkManager
+import androidx.work.*
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
 import com.worker8.simplecurrency.common.MainPreference
@@ -12,9 +10,11 @@ import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
 import com.worker8.simplecurrency.di.scope.PerActivityScope
+import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -83,16 +83,16 @@ class MainRepo @Inject constructor(
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-//        val updateCurrencyWorker =
-//            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 15, TimeUnit.MINUTES)
-//                .setConstraints(constraints)
-//                .build()
-//        workManager.enqueueUniquePeriodicWork(
-//            uniqueWorkerName,
-//            ExistingPeriodicWorkPolicy.KEEP,
-//            updateCurrencyWorker
-//        )
-
+        val updateCurrencyWorker =
+            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 5, TimeUnit.HOURS)
+                .setConstraints(constraints)
+                .build()
+        workManager.enqueueUniquePeriodicWork(
+            uniqueWorkerName,
+            ExistingPeriodicWorkPolicy.KEEP,
+            updateCurrencyWorker
+        )
+        /* uncomment the following for testing purpose */
 //        val oneTimeCurrencyWorker = OneTimeWorkRequest.Builder(UpdateCurrencyWorker::class.java)
 //            .setConstraints(constraints)
 //            .build()

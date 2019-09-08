@@ -86,4 +86,6 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
 
 //TODO: handle errors for .subscribe in all Rx stream
 //TODO: correctly scope things - public/private
-//TODO:
+//TODO: lint check
+//TODO: style arrangement
+
