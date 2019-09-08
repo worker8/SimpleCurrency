@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.longClicks
 import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
 import com.worker8.simplecurrency.ui.picker.PickerActivity
@@ -48,6 +49,7 @@ class MainActivity : DaggerAppCompatActivity() {
             override val backSpaceClick by lazy { mainNumBackspace.clicks() }
             override val dotClick by lazy { mainNumDot.clicks().map { '.' } }
             override val onTargetCurrencyClicked by lazy { mainTargetCurrencyPicker.clicks() }
+            override val backSpaceLongClick = mainNumBackspace.longClicks()
         }
         val viewActionLocal = object : MainContract.ViewAction {
             override fun navigateToSelectTargetCurrency(inputAmount: Double) {

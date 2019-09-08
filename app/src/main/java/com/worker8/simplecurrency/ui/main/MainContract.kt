@@ -15,6 +15,7 @@ class MainContract {
         val onNumpad8Click: Observable<Char>
         val onNumpad9Click: Observable<Char>
         val backSpaceClick: Observable<Unit>
+        val backSpaceLongClick: Observable<Unit>
         val swapButtonClick: Observable<Unit>
         val dotClick: Observable<Char>
         val onBaseCurrencyChanged: Observable<String>

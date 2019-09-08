@@ -25,17 +25,18 @@ class MainViewModel(private val repo: MainRepo) :
     lateinit var input: MainContract.Input
     lateinit var viewAction: MainContract.ViewAction
     lateinit var seedDatabaseSharedObservable: Observable<Boolean>
+    lateinit var backSpaceLongClickSharedObservable: Observable<String>
     lateinit var newNumberInputSharedObservable: Observable<String>
     lateinit var backSpaceInputEventSharedObservable: Observable<String>
     lateinit var calculateConversionRateSharedObservable: Observable<Result<Pair<Double, Double>>>
     lateinit var onTargetCurrencyClickedShared: Observable<Unit>
-    private val initializeSubject: PublishSubject<String> = PublishSubject.create()
+    private val triggerCalculateSubject: PublishSubject<String> = PublishSubject.create()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         setupInputEvents()
         processOutputEvents()
-        initializeSubject.onNext(currentInputString())
+        triggerCalculateSubject.onNext(currentInputString())
     }
 
     fun formatInput(s: String): String {
@@ -45,11 +46,14 @@ class MainViewModel(private val repo: MainRepo) :
         } else {
             return s.substring(0, dotIndex).toDouble().toComma() + s.substring(dotIndex)
         }
-
     }
 
     fun processOutputEvents() {
-        Observable.merge(newNumberInputSharedObservable, backSpaceInputEventSharedObservable)
+        Observable.merge(
+            newNumberInputSharedObservable,
+            backSpaceInputEventSharedObservable,
+            backSpaceLongClickSharedObservable
+        )
             .subscribe({ newInputString ->
                 dispatch(
                     currentScreenState.copy(
@@ -76,6 +80,9 @@ class MainViewModel(private val repo: MainRepo) :
                 onCreate()
             }
             .addTo(disposableBag)
+
+//        backSpaceLongClickSharedObservable.subscribe { triggerCalculateSubject.onNext(it) }
+//            .addTo(calculateDisposableBag)
 
         calculateConversionRateSharedObservable
             .map { result ->
@@ -113,6 +120,12 @@ class MainViewModel(private val repo: MainRepo) :
                 onCreate()
             }
             .addTo(calculateDisposableBag)
+//        input.backSpaceLongClick
+//            .doOnNext { Log.d("ddw", "long press") }
+//            .subscribe {
+//                onCreate()
+//            }
+//            .addTo(disposableBag)
         repo.setupPeriodicUpdate()
     }
 
@@ -121,14 +134,17 @@ class MainViewModel(private val repo: MainRepo) :
         calculateDisposableBag.clear()
 
         onTargetCurrencyClickedShared = input.onTargetCurrencyClicked.share()
-        newNumberInputSharedObservable = NewNumberInputEvent(input, screenStateSubject).process()
+        backSpaceLongClickSharedObservable = input.backSpaceLongClick.map { "0" }.share()
+        newNumberInputSharedObservable =
+            NewNumberInputEvent(input, screenStateSubject).process()
         backSpaceInputEventSharedObservable =
             BackSpaceInputEvent(input, screenStateSubject).process()
         seedDatabaseSharedObservable = repo.populateDbIfFirstTime().share()
         calculateConversionRateSharedObservable = CalculateConversionRateEvent(
             newNumberInputSharedObservable = newNumberInputSharedObservable,
             backSpaceInputEventSharedObservable = backSpaceInputEventSharedObservable,
-            initializeSubject = initializeSubject,
+            backSpaceLongClickSharedObservable = backSpaceLongClickSharedObservable,
+            triggerCalculateSubject = triggerCalculateSubject,
             seedDatabaseSharedObservable = seedDatabaseSharedObservable,
             repo = repo
         ).process()

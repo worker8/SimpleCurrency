@@ -8,7 +8,8 @@ import io.reactivex.subjects.PublishSubject
 class CalculateConversionRateEvent(
     private val newNumberInputSharedObservable: Observable<String>,
     private val backSpaceInputEventSharedObservable: Observable<String>,
-    private val initializeSubject: PublishSubject<String> = PublishSubject.create(),
+    private val backSpaceLongClickSharedObservable: Observable<String>,
+    private val triggerCalculateSubject: PublishSubject<String> = PublishSubject.create(),
     private val seedDatabaseSharedObservable: Observable<Boolean>,
     private val repo: MainRepo
 ) {
@@ -17,7 +18,8 @@ class CalculateConversionRateEvent(
             Observable.merge(
                 newNumberInputSharedObservable,
                 backSpaceInputEventSharedObservable,
-                initializeSubject
+                triggerCalculateSubject,
+                backSpaceLongClickSharedObservable
             ),
             seedDatabaseSharedObservable.subscribeOn(repo.schedulerSharedRepo.backgroundThread)
                 .flatMap { repo.getLatestSelectedRateFlowable().toObservable() },
