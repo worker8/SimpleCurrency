@@ -13,6 +13,7 @@ class PickerContract {
 
     data class ScreenState(
         val currencyList: LinkedHashSet<PickerAdapter.PickerRowType>,
-        val rateDetailVisibility: Boolean
+        val rateDetailVisibility: Boolean,
+        val latestUpdatedString: String
     )
 }

@@ -14,6 +14,7 @@ class App {
     val rxBinding = "3.0.0"
     val viewModel = "2.0.0"
     val workManager = "2.2.0"
+    val threeTenABP = "1.2.1"
 
     /* UI */
     val material = "1.1.0-alpha09"

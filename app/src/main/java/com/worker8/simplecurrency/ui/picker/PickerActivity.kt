@@ -2,13 +2,11 @@ package com.worker8.simplecurrency.ui.picker
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.worker8.simplecurrency.R
 import com.worker8.simplecurrency.addTo
 import dagger.android.support.DaggerAppCompatActivity
-import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_picker.*
 import javax.inject.Inject
@@ -44,6 +42,8 @@ class PickerActivity : DaggerAppCompatActivity() {
             .subscribe { screenState ->
                 screenState.apply {
                     adapter.submitList(currencyList.toList())
+                    pickerLastUpdatedMessage.text =
+                        "${getString(R.string.last_updated)} ${latestUpdatedString}"
                 }
             }
             .addTo(disposableBag)

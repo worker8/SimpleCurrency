@@ -1,19 +1,20 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.WorkManager
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
 import com.worker8.simplecurrency.common.MainPreference
 import com.worker8.simplecurrency.common.SchedulerSharedRepo
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
+import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
 import com.worker8.simplecurrency.di.scope.PerActivityScope
-import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -29,11 +30,12 @@ class MainRepo @Inject constructor(
         return Observable.fromCallable {
             if (MainPreference.getFirstTime(context)) {
                 // populate
-                val quotes = SeedCurrencyLayerLiveService(moshi).getSeedCurrencies()
+                val (quotes, timestamp) = SeedCurrencyLayerLiveService(moshi).getSeedCurrencies()
                 val roomConversionRateList = quotes.conversionRates.map {
                     RoomConversionRate.fromConversionRate(it)
                 }
                 db.roomConversionRateDao().insert(roomConversionRateList)
+                db.roomUpdatedTimeStampDao().insert(RoomUpdatedTimeStamp("1", timestamp))
                 return@fromCallable MainPreference.setFirstTimeFalse(context)
             } else {
                 return@fromCallable true

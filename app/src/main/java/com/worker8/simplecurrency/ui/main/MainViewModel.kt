@@ -38,11 +38,22 @@ class MainViewModel(private val repo: MainRepo) :
         initializeSubject.onNext(currentInputString())
     }
 
+    fun formatInput(s: String): String {
+        var dotIndex = s.indexOf('.')
+        if (dotIndex == -1) {
+            return s.toDouble().toComma()
+        } else {
+            return s.substring(0, dotIndex).toDouble().toComma() + s.substring(dotIndex)
+        }
+
+    }
+
     fun processOutputEvents() {
         Observable.merge(newNumberInputSharedObservable, backSpaceInputEventSharedObservable)
             .subscribe { newInputString ->
                 dispatch(
                     currentScreenState.copy(
+                        inputNumberString = formatInput(newInputString),
                         inputNumberStringState = newInputString,
                         isEnableDot = !newInputString.contains(".")
                     )
@@ -74,13 +85,20 @@ class MainViewModel(private val repo: MainRepo) :
                     currentScreenState.copy(
                         baseCurrencyCode = repo.getSelectedBaseCurrencyCode(),
                         targetCurrencyCode = repo.getSelectedTargetCurrencyCode(),
-                        inputNumberString = input.toComma(),
                         outputNumberString = outputCurrency.toTwoDecimalWithComma()
                     )
                 )
             }
             .addTo(calculateDisposableBag)
-
+//        newNumberInputSharedObservable
+//            .subscribe {
+//                dispatch(
+//                    currentScreenState.copy(
+//                        inputNumberString = it
+//                    )
+//                )
+//            }
+//            .addTo(calculateDisposableBag)
         onTargetCurrencyClickedShared
             .subscribeOn(repo.schedulerSharedRepo.mainThread)
             .withLatestFrom(calculateConversionRateSharedObservable,

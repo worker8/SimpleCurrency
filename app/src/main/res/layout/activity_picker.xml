@@ -21,9 +21,24 @@
         android:id="@+id/pickerRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pickerInput" />
+        app:layout_constraintTop_toBottomOf="@id/pickerInput"
+        tools:listitem="@layout/row_picker" />
+
+    <TextView
+        android:id="@+id/pickerLastUpdatedMessage"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Last Updated 09/09/2019 12:00pm" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,10 +11,12 @@ class SeedCurrencyLayerLiveService(val moshi: Moshi) {
         inputStream.bufferedReader().use(BufferedReader::readText)
     }
 
-    fun getSeedCurrencies(): Quotes {
+    fun getSeedCurrencies(): Pair<Quotes, Long> {
         val jsonAdapter = moshi.adapter(UsdCurrencyResponse::class.java)
         val response = jsonAdapter.fromJson(json)
-        return response?.quotes ?: Quotes()
+        val quotes = response?.quotes ?: Quotes()
+        val timestamp = response?.timestamp ?: 0
+        return quotes to timestamp
     }
 
 }

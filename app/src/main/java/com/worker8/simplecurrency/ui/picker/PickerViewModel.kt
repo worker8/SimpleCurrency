@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
     ViewModel(), LifecycleObserver {
     private val screenStateSubject =
-        BehaviorSubject.createDefault(PickerContract.ScreenState(linkedSetOf(), false))
+        BehaviorSubject.createDefault(PickerContract.ScreenState(linkedSetOf(), false, ""))
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     private val disposableBag = CompositeDisposable()
@@ -50,7 +50,19 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                 }
                 .addTo(disposableBag)
 
-            dispatch(currentScreenState.copy(rateDetailVisibility = !isBase))
+            repo.getLatestUpdatedDate()
+                .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
+                .observeOn(repo.schedulerSharedRepo.mainThread)
+                .subscribe {
+                    dispatch(
+                        currentScreenState.copy(
+                            rateDetailVisibility = !isBase,
+                            latestUpdatedString = it
+                        )
+                    )
+                }
+                .addTo(disposableBag)
+
         }
     }
 
