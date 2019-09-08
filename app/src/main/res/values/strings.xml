@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Simple Currency</string>
-    <string name="search_currencies">Search currencies...</string>
+    <string name="search_currencies">Search currencies by name or code</string>
 </resources>

@@ -18,7 +18,7 @@ class PickerRepo @Inject constructor(
         db.roomConversionRateDao().findRoomConversionRateFlowable(
             "%USD${searchText}%",
             "%${searchText}%"
-        )
+        ).toObservable()
 
     fun getBaseRate(): List<RoomConversionRate> {
         val baseCurrency = getSelectedBaseCurrencyCode() // "JPY"

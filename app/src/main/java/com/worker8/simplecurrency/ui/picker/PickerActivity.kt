@@ -31,7 +31,6 @@ class PickerActivity : DaggerAppCompatActivity() {
             override val inputAmount = this@PickerActivity.inputAmount
             override val onFilterTextChanged =
                 pickerInput.textChanges().map { it.toString() }
-                    .toFlowable(BackpressureStrategy.LATEST)
             override val isBase = this@PickerActivity.isBase
         }
         pickerRecyclerView.adapter = adapter
@@ -44,7 +43,7 @@ class PickerActivity : DaggerAppCompatActivity() {
             .observeOn(repo.schedulerSharedRepo.mainThread)
             .subscribe { screenState ->
                 screenState.apply {
-                    adapter.submitList(currencyList)
+                    adapter.submitList(currencyList.toList())
                 }
             }
             .addTo(disposableBag)

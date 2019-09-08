@@ -1,23 +1,19 @@
 package com.worker8.simplecurrency.ui.picker
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.addTo
-import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.realValue
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.function.BiFunction
+import java.util.concurrent.TimeUnit
 
 class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
     ViewModel(), LifecycleObserver {
     private val screenStateSubject =
-        BehaviorSubject.createDefault(PickerContract.ScreenState(listOf(), false))
+        BehaviorSubject.createDefault(PickerContract.ScreenState(linkedSetOf(), false))
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     private val disposableBag = CompositeDisposable()
@@ -25,10 +21,9 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
-
-            Flowable.merge(
-                Flowable.just(""),
-                onFilterTextChanged
+            Observable.merge(
+                Observable.just(""),
+                onFilterTextChanged.debounce(300, TimeUnit.MILLISECONDS)
             )
                 .flatMap { repo.getAllCurrenciesFromDb(it) }
                 .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
@@ -36,8 +31,9 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                 .map { it to repo.getBaseRate() }
                 .map { (filteredCurrencyRates, baseCurrencyList) ->
                     val baseCurrency = baseCurrencyList.get(0).rate
-                    filteredCurrencyRates.map { roomConversionRate ->
-                        roomConversionRate.run {
+                    val resultSet = linkedSetOf<PickerAdapter.PickerRowType>()
+                    filteredCurrencyRates.forEach { roomConversionRate ->
+                        resultSet.add(roomConversionRate.run {
                             val baseToTargetRate = (rate / baseCurrency)
                             PickerAdapter.PickerRowType(
                                 currencyName = Currency.ALL.get(getCodeWithoutUSD()) ?: "",
@@ -45,8 +41,9 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                                 currencyRateCalculated = "${inputAmount} ${repo.getSelectedBaseCurrencyCode()} = ${(inputAmount * baseToTargetRate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
                                 currencyCode = getCodeWithoutUSD()
                             )
-                        }
+                        })
                     }
+                    resultSet
                 }
                 .subscribe {
                     dispatch(currentScreenState.copy(it))
