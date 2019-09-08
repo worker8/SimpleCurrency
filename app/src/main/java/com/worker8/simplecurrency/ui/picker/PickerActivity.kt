@@ -14,7 +14,7 @@ import javax.inject.Inject
 class PickerActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var repo: PickerRepo
-    lateinit var input: PickerContract.Input
+
     val adapter by lazy { PickerAdapter(isBase) }
     private val disposableBag = CompositeDisposable()
 
@@ -25,7 +25,7 @@ class PickerActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picker)
 
-        input = object : PickerContract.Input {
+        val inputLocal = object : PickerContract.Input {
             override val inputAmount = this@PickerActivity.inputAmount
             override val onFilterTextChanged =
                 pickerInput.textChanges().map { it.toString() }
@@ -33,8 +33,9 @@ class PickerActivity : DaggerAppCompatActivity() {
         }
         pickerRecyclerView.adapter = adapter
         val viewModel =
-            ViewModelProviders.of(this, PickerViewModel.PickerViewModelFactory(input, repo))
+            ViewModelProviders.of(this, PickerViewModel.PickerViewModelFactory(repo))
                 .get(PickerViewModel::class.java)
+                .apply { input = inputLocal }
 
         viewModel.screenState
             .distinctUntilChanged()

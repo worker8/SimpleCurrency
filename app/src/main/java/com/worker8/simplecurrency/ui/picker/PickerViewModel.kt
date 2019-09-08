@@ -10,13 +10,14 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
-class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
+class PickerViewModel(private val repo: PickerRepo) :
     ViewModel(), LifecycleObserver {
     private val screenStateSubject =
         BehaviorSubject.createDefault(PickerContract.ScreenState(linkedSetOf(), false, ""))
     val currentScreenState get() = screenStateSubject.realValue
     var screenState = screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
     private val disposableBag = CompositeDisposable()
+    lateinit var input: PickerContract.Input
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
@@ -76,10 +77,10 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
     }
 
     @Suppress("UNCHECKED_CAST")
-    class PickerViewModelFactory(val input: PickerContract.Input, private val repo: PickerRepo) :
+    class PickerViewModelFactory(private val repo: PickerRepo) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PickerViewModel(input, repo) as T
+            return PickerViewModel(repo) as T
         }
     }
 }

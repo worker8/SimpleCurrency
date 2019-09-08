@@ -19,9 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.picker.PickerActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.picker.PickerActivity" />
     </application>
 
 </manifest>
