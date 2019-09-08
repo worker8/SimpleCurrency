@@ -13,6 +13,7 @@ class App {
     val rxJava = "2.1.13"
     val rxBinding = "3.0.0"
     val viewModel = "2.0.0"
+    val workManager = "2.2.0"
 
     /* UI */
     val material = "1.1.0-alpha09"

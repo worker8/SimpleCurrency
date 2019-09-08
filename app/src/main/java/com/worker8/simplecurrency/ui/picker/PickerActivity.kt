@@ -40,6 +40,7 @@ class PickerActivity : DaggerAppCompatActivity() {
                 .get(PickerViewModel::class.java)
 
         viewModel.screenState
+            .distinctUntilChanged()
             .observeOn(repo.schedulerSharedRepo.mainThread)
             .subscribe { screenState ->
                 screenState.apply {

@@ -71,6 +71,8 @@ class MainActivity : DaggerAppCompatActivity() {
             startActivityForResult(intent, PICKER_BASE_REQUEST_CODE)
         }
         viewModel.screenState
+            .distinctUntilChanged()
+            .observeOn(repo.schedulerSharedRepo.mainThread)
             .subscribe {
                 it.apply {
                     mainInputCurrency.text = baseCurrencyCode

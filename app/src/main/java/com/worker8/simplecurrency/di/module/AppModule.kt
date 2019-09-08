@@ -2,7 +2,9 @@ package com.worker8.simplecurrency.di.module
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.squareup.moshi.Moshi
+import com.worker8.currencylayer.network.CurrencyLayerLiveService
 import com.worker8.currencylayer.network.CurrencyLayerMoshi
 import com.worker8.currencylayer.network.CurrencyLayerRetrofit
 import com.worker8.simplecurrency.SimpleCurrencyApplication
@@ -24,7 +26,11 @@ class AppModule {
     @Singleton
     @Provides
     fun provideDatabase(context: Context): SimpleCurrencyDatabase {
-        return Room.databaseBuilder(context, SimpleCurrencyDatabase::class.java, "SimpleCurrencyDatabase").build()
+        return Room.databaseBuilder(
+            context,
+            SimpleCurrencyDatabase::class.java,
+            "SimpleCurrencyDatabase"
+        ).build()
     }
 
     @Singleton
@@ -35,8 +41,20 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideWorkManager(context: Context): WorkManager {
+        return WorkManager.getInstance(context)
+    }
+
+    @Singleton
+    @Provides
     fun provideRetrofit(moshi: Moshi): Retrofit {
         return CurrencyLayerRetrofit.build(moshi)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrencyLayerLiveService(retrofit: Retrofit): CurrencyLayerLiveService {
+        return retrofit.create(CurrencyLayerLiveService::class.java)
     }
 
     @Named(ScopeConstant.MainThreadScheduler)

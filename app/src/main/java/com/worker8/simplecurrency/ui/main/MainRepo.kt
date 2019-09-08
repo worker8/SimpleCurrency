@@ -1,6 +1,7 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.content.Context
+import androidx.work.*
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
 import com.worker8.simplecurrency.common.MainPreference
@@ -8,16 +9,20 @@ import com.worker8.simplecurrency.common.SchedulerSharedRepo
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.di.scope.PerActivityScope
+import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 @PerActivityScope
 class MainRepo @Inject constructor(
     private val context: Context,
     val db: SimpleCurrencyDatabase,
     val moshi: Moshi,
+    val workManager: WorkManager,
     val schedulerSharedRepo: SchedulerSharedRepo
 ) {
     fun populateDbIfFirstTime(): Observable<Boolean> {
@@ -70,5 +75,29 @@ class MainRepo @Inject constructor(
                 }
                 return@BiFunction rate
             })
+    }
+
+    fun setupPeriodicUpdate() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+//        val updateCurrencyWorker =
+//            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 15, TimeUnit.MINUTES)
+//                .setConstraints(constraints)
+//                .build()
+//        workManager.enqueueUniquePeriodicWork(
+//            uniqueWorkerName,
+//            ExistingPeriodicWorkPolicy.KEEP,
+//            updateCurrencyWorker
+//        )
+
+//        val oneTimeCurrencyWorker = OneTimeWorkRequest.Builder(UpdateCurrencyWorker::class.java)
+//            .setConstraints(constraints)
+//            .build()
+//        workManager.enqueue(oneTimeCurrencyWorker)
+    }
+
+    companion object {
+        val uniqueWorkerName = "get_latest_currency"
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.realValue
 import io.reactivex.BackpressureStrategy
@@ -11,6 +12,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.function.BiFunction
 
 class PickerViewModel(private val input: PickerContract.Input, private val repo: PickerRepo) :
     ViewModel(), LifecycleObserver {
@@ -23,6 +25,7 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
+
             Flowable.merge(
                 Flowable.just(""),
                 onFilterTextChanged
@@ -74,3 +77,4 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
 
 //TODO: handle errors for .subscribe in all Rx stream
 //TODO: correctly scope things - public/private
+//TODO:
