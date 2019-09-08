@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
     private val disposableBag = CompositeDisposable()
-//    lateinit var input: MainContract.Input
 
     private val onBaseCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
     private val onTargetCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
@@ -71,16 +70,6 @@ class MainActivity : DaggerAppCompatActivity() {
                 .apply { putExtra(PickerActivity.BASE_OR_TARGET_KEY, true) }
             startActivityForResult(intent, PICKER_BASE_REQUEST_CODE)
         }
-
-//        mainTargetCurrencyPicker.setOnClickListener {
-//            val intent = Intent(this@MainActivity, PickerActivity::class.java)
-//                .apply {
-//                    putExtra(PickerActivity.BASE_OR_TARGET_KEY, false)
-//                    putExtra(PickerActivity.INPUT_AMOUNT, 1000.0)
-//                }
-//            startActivityForResult(intent, PICKER_TARGET_REQUEST_CODE)
-//        }
-
         viewModel.screenState
             .subscribe {
                 it.apply {

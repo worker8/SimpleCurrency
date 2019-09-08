@@ -35,9 +35,7 @@ class PickerViewModel(private val input: PickerContract.Input, private val repo:
                     val baseCurrency = baseCurrencyList.get(0).rate
                     filteredCurrencyRates.map { roomConversionRate ->
                         roomConversionRate.run {
-                            Log.d("ddw", "rate: ${rate}, baseCurrency: ${baseCurrency}")
                             val baseToTargetRate = (rate / baseCurrency)
-                            Log.d("ddw", "baseToTargetRate: ${baseToTargetRate}")
                             PickerAdapter.PickerRowType(
                                 currencyName = Currency.ALL.get(getCodeWithoutUSD()) ?: "",
                                 currencyRate = "1 ${repo.getSelectedBaseCurrencyCode()} = ${rate.toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
