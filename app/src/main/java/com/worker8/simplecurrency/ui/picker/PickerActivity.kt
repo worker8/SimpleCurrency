@@ -39,7 +39,7 @@ class PickerActivity : DaggerAppCompatActivity() {
 
         viewModel.screenState
             .distinctUntilChanged()
-            .observeOn(repo.schedulerSharedRepo.mainThread)
+            .observeOn(repo.mainThread)
             .subscribe { screenState ->
                 screenState.apply {
                     adapter.submitList(currencyList.toList())

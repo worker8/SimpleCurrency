@@ -61,6 +61,7 @@ dependencies {
 
     /* Test */
     testImplementation "junit:junit:$Versions.Test.junit"
+    testImplementation "io.mockk:mockk:$Versions.Test.mockk"
     androidTestImplementation "androidx.test.ext:junit:$Versions.Test.junitExt"
     androidTestImplementation "androidx.test:core:$Versions.Test.core"
     androidTestImplementation "androidx.test:runner:$Versions.Test.runner"

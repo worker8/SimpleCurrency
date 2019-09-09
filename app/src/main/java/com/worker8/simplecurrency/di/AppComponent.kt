@@ -1,7 +1,9 @@
 package com.worker8.simplecurrency.di
 
 import com.worker8.simplecurrency.SimpleCurrencyApplication
+import com.worker8.simplecurrency.di.module.ActivityModule
 import com.worker8.simplecurrency.di.module.AppModule
+import com.worker8.simplecurrency.di.module.RepoModule
 import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import dagger.BindsInstance
 import dagger.Component
@@ -14,7 +16,8 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        ActivityModule::class
+        ActivityModule::class,
+        RepoModule::class
     ]
 )
 interface AppComponent : AndroidInjector<SimpleCurrencyApplication> {

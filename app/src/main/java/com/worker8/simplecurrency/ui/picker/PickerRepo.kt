@@ -2,22 +2,27 @@ package com.worker8.simplecurrency.ui.picker
 
 import android.content.Context
 import com.worker8.simplecurrency.common.MainPreference
-import com.worker8.simplecurrency.common.SchedulerSharedRepo
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.di.scope.PerActivityScope
+import com.worker8.simplecurrency.di.scope.ScopeConstant
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
+import javax.inject.Named
 
 @PerActivityScope
 class PickerRepo @Inject constructor(
     private val context: Context,
     val db: SimpleCurrencyDatabase,
-    val schedulerSharedRepo: SchedulerSharedRepo
+    @Named(ScopeConstant.MainThreadScheduler)
+    val mainThread: Scheduler,
+    @Named(ScopeConstant.BackgroundThreadScheduler)
+    val backgroundThread: Scheduler
 ) {
     fun getAllCurrenciesFromDb(searchText: String): Observable<List<RoomConversionRate>> =
         db.roomConversionRateDao().findRoomConversionRateFlowable(

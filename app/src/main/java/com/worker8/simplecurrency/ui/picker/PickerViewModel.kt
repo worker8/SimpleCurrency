@@ -16,7 +16,7 @@ class PickerViewModel(private val repo: PickerRepo) :
         BehaviorSubject.createDefault(PickerContract.ScreenState(linkedSetOf(), false, ""))
     private val currentScreenState: PickerContract.ScreenState get() = screenStateSubject.realValue
     var screenState: Observable<PickerContract.ScreenState> =
-        screenStateSubject.hide().observeOn(repo.schedulerSharedRepo.mainThread)
+        screenStateSubject.hide().observeOn(repo.mainThread)
     private val disposableBag = CompositeDisposable()
     lateinit var input: PickerContract.Input
 
@@ -28,8 +28,8 @@ class PickerViewModel(private val repo: PickerRepo) :
                 onFilterTextChanged.debounce(300, TimeUnit.MILLISECONDS)
             )
                 .flatMap { repo.getAllCurrenciesFromDb(it) }
-                .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
-                .observeOn(repo.schedulerSharedRepo.backgroundThread)
+                .subscribeOn(repo.backgroundThread)
+                .observeOn(repo.backgroundThread)
                 .map { it to repo.getBaseRate() }
                 .map { (filteredCurrencyRates, baseCurrencyList) ->
                     val baseCurrency = baseCurrencyList[0].rate
@@ -53,8 +53,8 @@ class PickerViewModel(private val repo: PickerRepo) :
                 .addTo(disposableBag)
 
             repo.getLatestUpdatedDate()
-                .subscribeOn(repo.schedulerSharedRepo.backgroundThread)
-                .observeOn(repo.schedulerSharedRepo.mainThread)
+                .subscribeOn(repo.backgroundThread)
+                .observeOn(repo.mainThread)
                 .subscribe {
                     dispatch(
                         currentScreenState.copy(

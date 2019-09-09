@@ -14,7 +14,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-class MainViewModel(private val repo: MainRepo) :
+class MainViewModel(private val repo: MainRepoInterface) :
     ViewModel(), LifecycleObserver {
     private val screenStateSubject = BehaviorSubject.createDefault(MainContract.ScreenState())
     private val disposableBag = CompositeDisposable()
@@ -89,13 +89,13 @@ class MainViewModel(private val repo: MainRepo) :
             .addTo(calculateDisposableBag)
 
         onTargetCurrencyClickedShared
-            .subscribeOn(repo.schedulerSharedRepo.mainThread)
+            .subscribeOn(repo.mainThread)
             .withLatestFrom(calculateConversionRateSharedObservable,
                 BiFunction<Unit, Result<Pair<Double, Double>>, Double> { _, result ->
                     val (input, _) = result.getOrDefault(Pair(0.0, 0.0))
                     input
                 })
-            .observeOn(repo.schedulerSharedRepo.mainThread)
+            .observeOn(repo.mainThread)
             .subscribe { viewAction.navigateToSelectTargetCurrency(it) }
             .addTo(calculateDisposableBag)
 
@@ -148,7 +148,7 @@ class MainViewModel(private val repo: MainRepo) :
     }
 
     @Suppress("UNCHECKED_CAST")
-    class MainViewModelFactory(private val repo: MainRepo) :
+    class MainViewModelFactory(private val repo: MainRepoInterface) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MainViewModel(repo) as T

@@ -23,7 +23,6 @@ import retrofit2.Retrofit
 import javax.inject.Named
 import javax.inject.Singleton
 
-
 @Module(includes = [AppModule.AppModuleInterface::class])
 class AppModule {
 

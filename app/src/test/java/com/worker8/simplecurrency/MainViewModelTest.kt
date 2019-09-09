@@ -1,0 +1,115 @@
+package com.worker8.simplecurrency
+
+import com.worker8.simplecurrency.ui.main.MainContract
+import com.worker8.simplecurrency.ui.main.MainRepoInterface
+import com.worker8.simplecurrency.ui.main.MainViewModel
+import io.mockk.*
+import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import org.junit.Before
+import org.junit.Test
+
+class MainViewModelTest {
+    private lateinit var input: MainContract.Input
+    private lateinit var repo: MainRepoInterface
+    private lateinit var viewModel: MainViewModel
+    private lateinit var viewAction: MainContract.ViewAction
+
+    /* input */
+    private lateinit var onNumpad0Click: PublishSubject<Char>
+    private lateinit var onNumpad1Click: PublishSubject<Char>
+    private lateinit var onNumpad2Click: PublishSubject<Char>
+    private lateinit var onNumpad3Click: PublishSubject<Char>
+    private lateinit var onNumpad4Click: PublishSubject<Char>
+    private lateinit var onNumpad5Click: PublishSubject<Char>
+    private lateinit var onNumpad6Click: PublishSubject<Char>
+    private lateinit var onNumpad7Click: PublishSubject<Char>
+    private lateinit var onNumpad8Click: PublishSubject<Char>
+    private lateinit var onNumpad9Click: PublishSubject<Char>
+    private lateinit var backSpaceClick: PublishSubject<Unit>
+    private lateinit var backSpaceLongClick: PublishSubject<Unit>
+    private lateinit var swapButtonClick: PublishSubject<Unit>
+    private lateinit var dotClick: PublishSubject<Char>
+    private lateinit var onBaseCurrencyChanged: PublishSubject<String>
+    private lateinit var onTargetCurrencyChanged: PublishSubject<String>
+    private lateinit var onTargetCurrencyClicked: PublishSubject<Unit>
+
+    /* repo */
+    private lateinit var getLatestSelectedRateFlowable: PublishProcessor<Double>
+    private lateinit var populateDbIfFirstTime: PublishSubject<Boolean>
+
+    @Before
+    fun setup() {
+        input = mockk()
+
+        onNumpad0Click = PublishSubject.create()
+        onNumpad1Click = PublishSubject.create()
+        onNumpad2Click = PublishSubject.create()
+        onNumpad3Click = PublishSubject.create()
+        onNumpad4Click = PublishSubject.create()
+        onNumpad5Click = PublishSubject.create()
+        onNumpad6Click = PublishSubject.create()
+        onNumpad7Click = PublishSubject.create()
+        onNumpad8Click = PublishSubject.create()
+        onNumpad9Click = PublishSubject.create()
+        backSpaceClick = PublishSubject.create()
+        backSpaceLongClick = PublishSubject.create()
+        swapButtonClick = PublishSubject.create()
+        dotClick = PublishSubject.create()
+        onBaseCurrencyChanged = PublishSubject.create()
+        onTargetCurrencyChanged = PublishSubject.create()
+        onTargetCurrencyClicked = PublishSubject.create()
+
+        getLatestSelectedRateFlowable = PublishProcessor.create()
+        populateDbIfFirstTime = PublishSubject.create()
+
+        every { input.onNumpad0Click } returns onNumpad0Click
+        every { input.onNumpad1Click } returns onNumpad1Click
+        every { input.onNumpad2Click } returns onNumpad2Click
+        every { input.onNumpad3Click } returns onNumpad3Click
+        every { input.onNumpad4Click } returns onNumpad4Click
+        every { input.onNumpad5Click } returns onNumpad5Click
+        every { input.onNumpad6Click } returns onNumpad6Click
+        every { input.onNumpad7Click } returns onNumpad7Click
+        every { input.onNumpad8Click } returns onNumpad8Click
+        every { input.onNumpad9Click } returns onNumpad9Click
+
+        every { input.backSpaceClick } returns backSpaceClick
+        every { input.backSpaceLongClick } returns backSpaceLongClick
+        every { input.swapButtonClick } returns swapButtonClick
+        every { input.dotClick } returns dotClick
+        every { input.onBaseCurrencyChanged } returns onBaseCurrencyChanged
+        every { input.onTargetCurrencyChanged } returns onTargetCurrencyChanged
+        every { input.onTargetCurrencyClicked } returns onTargetCurrencyClicked
+
+        repo = mockk(relaxed = true)
+
+
+        every { repo.mainThread } returns Schedulers.trampoline()
+        every { repo.backgroundThread } returns Schedulers.trampoline()
+        every { repo.populateDbIfFirstTime() } returns populateDbIfFirstTime
+        every { repo.getSelectedBaseCurrencyCode() } returns "JPY"
+        every { repo.getSelectedTargetCurrencyCode() } returns "USD"
+
+        every { repo.setSelectedBaseCurrencyCode(any()) } returns true
+        every { repo.setSelectedTargetCurrencyCode(any()) } returns true
+
+        every { repo.getLatestSelectedRateFlowable() } returns getLatestSelectedRateFlowable
+        every { repo.setupPeriodicUpdate() } just Runs
+
+        viewAction = mockk(relaxed = true)
+
+        viewModel = MainViewModel(repo)
+            .apply {
+                input = this@MainViewModelTest.input
+                viewAction = this@MainViewModelTest.viewAction
+            }
+    }
+
+    @Test
+    fun testConversion() {
+        viewModel.onCreate()
+        verify(exactly = 1) { repo.setupPeriodicUpdate() }
+    }
+}

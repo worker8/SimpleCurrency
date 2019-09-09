@@ -23,7 +23,8 @@ class MainActivity : DaggerAppCompatActivity() {
     private val onTargetCurrencyChangedSubject: PublishSubject<String> = PublishSubject.create()
 
     @Inject
-    lateinit var repo: MainRepo
+    lateinit var repo: MainRepoInterface
+
     private val PICKER_BASE_REQUEST_CODE = 3832
     val PICKER_TARGET_REQUEST_CODE = 3833
 
@@ -74,7 +75,7 @@ class MainActivity : DaggerAppCompatActivity() {
         }
         viewModel.screenState
             .distinctUntilChanged()
-            .observeOn(repo.schedulerSharedRepo.mainThread)
+            .observeOn(repo.mainThread)
             .subscribe {
                 it.apply {
                     mainInputCurrency.text = baseCurrencyCode

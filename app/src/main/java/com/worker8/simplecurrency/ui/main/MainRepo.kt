@@ -1,32 +1,47 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.content.Context
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.WorkManager
+import androidx.work.*
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
 import com.worker8.simplecurrency.common.MainPreference
-import com.worker8.simplecurrency.common.SchedulerSharedRepo
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
-import com.worker8.simplecurrency.di.scope.PerActivityScope
+import com.worker8.simplecurrency.di.scope.ScopeConstant
+import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
+interface MainRepoInterface {
+    val mainThread: Scheduler
+    val backgroundThread: Scheduler
+    fun populateDbIfFirstTime(): Observable<Boolean>
+    fun getSelectedBaseCurrencyCode(): String
+    fun getSelectedTargetCurrencyCode(): String
+    fun setSelectedBaseCurrencyCode(currencyCode: String): Boolean
+    fun setSelectedTargetCurrencyCode(currencyCode: String): Boolean
+    fun getLatestSelectedRateFlowable(): Flowable<Double>
+    fun setupPeriodicUpdate()
+}
 
-@PerActivityScope
 class MainRepo @Inject constructor(
     private val context: Context,
     val db: SimpleCurrencyDatabase,
     private val moshi: Moshi,
     private val workManager: WorkManager,
-    val schedulerSharedRepo: SchedulerSharedRepo
-) {
-    fun populateDbIfFirstTime(): Observable<Boolean> {
+    @Named(ScopeConstant.MainThreadScheduler)
+    override val mainThread: Scheduler,
+    @Named(ScopeConstant.BackgroundThreadScheduler)
+    override val backgroundThread: Scheduler
+) : MainRepoInterface {
+
+    override fun populateDbIfFirstTime(): Observable<Boolean> {
         return Observable.fromCallable {
             if (MainPreference.getFirstTime(context)) {
                 // populate
@@ -43,16 +58,16 @@ class MainRepo @Inject constructor(
         }
     }
 
-    fun getSelectedBaseCurrencyCode() =
+    override fun getSelectedBaseCurrencyCode() =
         MainPreference.getSelectedBaseCurrencyCode(context)
 
-    fun getSelectedTargetCurrencyCode() =
+    override fun getSelectedTargetCurrencyCode() =
         MainPreference.getSelectedTargetCurrencyCode(context)
 
-    fun setSelectedBaseCurrencyCode(currencyCode: String) =
+    override fun setSelectedBaseCurrencyCode(currencyCode: String) =
         MainPreference.setSelectedBaseCurrencyCode(context, currencyCode)
 
-    fun setSelectedTargetCurrencyCode(currencyCode: String) =
+    override fun setSelectedTargetCurrencyCode(currencyCode: String) =
         MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 
     private fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
@@ -65,7 +80,7 @@ class MainRepo @Inject constructor(
         return db.roomConversionRateDao().findConversionRateFlowable("USD$targetCurrency")
     }
 
-    fun getLatestSelectedRateFlowable(): Flowable<Double> {
+    override fun getLatestSelectedRateFlowable(): Flowable<Double> {
         return Flowable.combineLatest(
             getBaseRateFlowable(),
             getTargetRateFlowable(),
@@ -78,18 +93,18 @@ class MainRepo @Inject constructor(
             })
     }
 
-    fun setupPeriodicUpdate() {
+    override fun setupPeriodicUpdate() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED).build()
-//        val updateCurrencyWorker =
-//            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
-//                .setConstraints(constraints)
-//                .build()
-//        workManager.enqueueUniquePeriodicWork(
-//            uniqueWorkerName,
-//            ExistingPeriodicWorkPolicy.KEEP,
-//            updateCurrencyWorker
-//        )
+        val updateCurrencyWorker =
+            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+        workManager.enqueueUniquePeriodicWork(
+            uniqueWorkerName,
+            ExistingPeriodicWorkPolicy.KEEP,
+            updateCurrencyWorker
+        )
 
         /* uncomment the following for testing purpose */
 //        val oneTimeCurrencyWorker = OneTimeWorkRequest.Builder(UpdateCurrencyWorker::class.java)

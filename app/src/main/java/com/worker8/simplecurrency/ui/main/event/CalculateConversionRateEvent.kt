@@ -1,6 +1,6 @@
 package com.worker8.simplecurrency.ui.main.event
 
-import com.worker8.simplecurrency.ui.main.MainRepo
+import com.worker8.simplecurrency.ui.main.MainRepoInterface
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
@@ -11,7 +11,7 @@ class CalculateConversionRateEvent(
     private val backSpaceLongClickSharedObservable: Observable<String>,
     private val triggerCalculateSubject: PublishSubject<String> = PublishSubject.create(),
     private val seedDatabaseSharedObservable: Observable<Boolean>,
-    private val repo: MainRepo
+    private val repo: MainRepoInterface
 ) {
     fun process(): Observable<Result<Pair<Double, Double>>> {
         return Observable.combineLatest(
@@ -21,7 +21,7 @@ class CalculateConversionRateEvent(
                 triggerCalculateSubject,
                 backSpaceLongClickSharedObservable
             ),
-            seedDatabaseSharedObservable.subscribeOn(repo.schedulerSharedRepo.backgroundThread)
+            seedDatabaseSharedObservable.subscribeOn(repo.backgroundThread)
                 .flatMap { repo.getLatestSelectedRateFlowable().toObservable() },
             BiFunction<String, Double, Result<Pair<Double, Double>>> { numberString, rate ->
                 val dotRemoved = if (numberString.isNotEmpty() && numberString.last() == '.') {

@@ -35,6 +35,7 @@ class Debug {
 
 class Test {
     val junit = "4.12"
+    val mockk = "1.9"
     val runner = "1.2.0"
     val core = "1.2.0"
     val junitExt = "1.1.0"
