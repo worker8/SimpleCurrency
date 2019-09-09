@@ -1,4 +1,4 @@
-package com.worker8.simplecurrency.extension
+package com.worker8.simplecurrency.common.extension
 
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -18,4 +18,3 @@ fun Double.toTwoDecimalWithComma(): String {
     val bigDecimal = this.toBigDecimal().setScale(2, RoundingMode.HALF_UP)
     return decimalFormat.format(bigDecimal)
 }
-

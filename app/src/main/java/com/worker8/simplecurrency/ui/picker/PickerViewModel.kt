@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.common.addTo
 import com.worker8.simplecurrency.common.realValue
-import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
+import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

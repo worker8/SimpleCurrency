@@ -1,10 +1,10 @@
 package com.worker8.simplecurrency.ui.main
 
 import androidx.lifecycle.*
+import com.worker8.simplecurrency.common.NumberFormatter
 import com.worker8.simplecurrency.common.addTo
 import com.worker8.simplecurrency.common.realValue
-import com.worker8.simplecurrency.extension.toComma
-import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
+import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.ui.main.event.BackSpaceInputEvent
 import com.worker8.simplecurrency.ui.main.event.CalculateConversionRateEvent
 import com.worker8.simplecurrency.ui.main.event.NewNumberInputEvent
@@ -39,15 +39,6 @@ class MainViewModel(private val repo: MainRepo) :
         triggerCalculateSubject.onNext(currentInputString())
     }
 
-    private fun formatInput(s: String): String {
-        val dotIndex = s.indexOf('.')
-        return if (dotIndex == -1) {
-            s.toDouble().toComma()
-        } else {
-            s.substring(0, dotIndex).toDouble().toComma() + s.substring(dotIndex)
-        }
-    }
-
     private fun processOutputEvents() {
         Observable.merge(
             newNumberInputSharedObservable,
@@ -57,7 +48,7 @@ class MainViewModel(private val repo: MainRepo) :
             .subscribe({ newInputString ->
                 dispatch(
                     currentScreenState.copy(
-                        inputNumberString = formatInput(newInputString),
+                        inputNumberString = NumberFormatter.addComma(newInputString),
                         inputNumberStringState = newInputString,
                         isEnableDot = !newInputString.contains(".")
                     )
