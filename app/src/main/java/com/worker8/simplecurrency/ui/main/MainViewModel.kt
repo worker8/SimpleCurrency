@@ -1,10 +1,10 @@
 package com.worker8.simplecurrency.ui.main
 
 import androidx.lifecycle.*
-import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.common.addTo
+import com.worker8.simplecurrency.common.realValue
 import com.worker8.simplecurrency.extension.toComma
 import com.worker8.simplecurrency.extension.toTwoDecimalWithComma
-import com.worker8.simplecurrency.realValue
 import com.worker8.simplecurrency.ui.main.event.BackSpaceInputEvent
 import com.worker8.simplecurrency.ui.main.event.CalculateConversionRateEvent
 import com.worker8.simplecurrency.ui.main.event.NewNumberInputEvent
@@ -19,17 +19,17 @@ class MainViewModel(private val repo: MainRepo) :
     private val screenStateSubject = BehaviorSubject.createDefault(MainContract.ScreenState())
     private val disposableBag = CompositeDisposable()
     private val calculateDisposableBag = CompositeDisposable()
-    val currentScreenState get() = screenStateSubject.realValue
-    var screenState = screenStateSubject.hide()
+    private val currentScreenState: MainContract.ScreenState get() = screenStateSubject.realValue
+    var screenState: Observable<MainContract.ScreenState> = screenStateSubject.hide()
 
     lateinit var input: MainContract.Input
     lateinit var viewAction: MainContract.ViewAction
-    lateinit var seedDatabaseSharedObservable: Observable<Boolean>
-    lateinit var backSpaceLongClickSharedObservable: Observable<String>
-    lateinit var newNumberInputSharedObservable: Observable<String>
-    lateinit var backSpaceInputEventSharedObservable: Observable<String>
-    lateinit var calculateConversionRateSharedObservable: Observable<Result<Pair<Double, Double>>>
-    lateinit var onTargetCurrencyClickedShared: Observable<Unit>
+    private lateinit var seedDatabaseSharedObservable: Observable<Boolean>
+    private lateinit var backSpaceLongClickSharedObservable: Observable<String>
+    private lateinit var newNumberInputSharedObservable: Observable<String>
+    private lateinit var backSpaceInputEventSharedObservable: Observable<String>
+    private lateinit var calculateConversionRateSharedObservable: Observable<Result<Pair<Double, Double>>>
+    private lateinit var onTargetCurrencyClickedShared: Observable<Unit>
     private val triggerCalculateSubject: PublishSubject<String> = PublishSubject.create()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -39,16 +39,16 @@ class MainViewModel(private val repo: MainRepo) :
         triggerCalculateSubject.onNext(currentInputString())
     }
 
-    fun formatInput(s: String): String {
-        var dotIndex = s.indexOf('.')
-        if (dotIndex == -1) {
-            return s.toDouble().toComma()
+    private fun formatInput(s: String): String {
+        val dotIndex = s.indexOf('.')
+        return if (dotIndex == -1) {
+            s.toDouble().toComma()
         } else {
-            return s.substring(0, dotIndex).toDouble().toComma() + s.substring(dotIndex)
+            s.substring(0, dotIndex).toDouble().toComma() + s.substring(dotIndex)
         }
     }
 
-    fun processOutputEvents() {
+    private fun processOutputEvents() {
         Observable.merge(
             newNumberInputSharedObservable,
             backSpaceInputEventSharedObservable,
@@ -121,7 +121,7 @@ class MainViewModel(private val repo: MainRepo) :
         repo.setupPeriodicUpdate()
     }
 
-    fun setupInputEvents() {
+    private fun setupInputEvents() {
         disposableBag.clear()
         calculateDisposableBag.clear()
 
@@ -152,7 +152,7 @@ class MainViewModel(private val repo: MainRepo) :
         calculateDisposableBag.dispose()
     }
 
-    fun dispatch(screenState: MainContract.ScreenState) {
+    private fun dispatch(screenState: MainContract.ScreenState) {
         screenStateSubject.onNext(screenState)
     }
 

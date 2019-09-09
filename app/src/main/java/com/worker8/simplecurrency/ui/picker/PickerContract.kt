@@ -1,6 +1,5 @@
 package com.worker8.simplecurrency.ui.picker
 
-import io.reactivex.Flowable
 import io.reactivex.Observable
 
 

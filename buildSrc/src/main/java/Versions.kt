@@ -19,7 +19,6 @@ class App {
     /* UI */
     val material = "1.1.0-alpha09"
     val constraintLayout = "2.0.0-beta2"
-    val recyclerView = "1.1.0-beta01"
 
     /* Network & Data Layer */
     val moshi = "1.8.0"
@@ -50,7 +49,6 @@ class Tool {
 class AndroidConfig {
     val sdkVersion = 28 // target & compile sdk
     val minSdkVersion = 21
-    val targetSdkVersion = 28
     val versionCode = 1
     val versionName = "0.1.0"
 }

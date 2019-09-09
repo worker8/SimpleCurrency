@@ -4,7 +4,7 @@ import java.util.*
 
 object Secrets {
     private const val CURRENCY_LAYER_ACCESS_TOKEN = "CURRENCY_LAYER_ACCESS_TOKEN"
-    val currencyLayerAccessToken = apiKeysProperties().getProperty(CURRENCY_LAYER_ACCESS_TOKEN)
+    val currencyLayerAccessToken: String = apiKeysProperties().getProperty(CURRENCY_LAYER_ACCESS_TOKEN)
 
     private fun apiKeysProperties(): Properties {
         val filename = "api_keys.properties"

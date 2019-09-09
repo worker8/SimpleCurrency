@@ -1,6 +1,6 @@
 package com.worker8.simplecurrency.ui.main.event
 
-import com.worker8.simplecurrency.realValue
+import com.worker8.simplecurrency.common.realValue
 import com.worker8.simplecurrency.ui.main.MainContract
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -9,7 +9,7 @@ class NewNumberInputEvent(
     private val input: MainContract.Input,
     private val screenStateSubject: BehaviorSubject<MainContract.ScreenState>
 ) {
-    val currentScreenState get() = screenStateSubject.realValue
+    private val currentScreenState get() = screenStateSubject.realValue
     fun process(): Observable<String> {
         return Observable.merge(
             arrayListOf(

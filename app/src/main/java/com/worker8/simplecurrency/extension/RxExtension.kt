@@ -1,4 +1,4 @@
-package com.worker8.simplecurrency
+package com.worker8.simplecurrency.common
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.worker8.simplecurrency.R
-import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.common.addTo
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_picker.*
@@ -15,7 +15,7 @@ class PickerActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var repo: PickerRepo
 
-    val adapter by lazy { PickerAdapter(isBase) }
+    private val adapter by lazy { PickerAdapter(isBase) }
     private val disposableBag = CompositeDisposable()
 
     val isBase get() = intent.getBooleanExtra(BASE_OR_TARGET_KEY, true)
@@ -64,8 +64,8 @@ class PickerActivity : DaggerAppCompatActivity() {
     }
 
     companion object {
-        val INPUT_AMOUNT = "INPUT_AMOUNT"
-        val BASE_OR_TARGET_KEY = "BASE_OR_TARGET_KEY"
-        val RESULT_KEY = "RESULT_KEY"
+        const val INPUT_AMOUNT = "INPUT_AMOUNT"
+        const val BASE_OR_TARGET_KEY = "BASE_OR_TARGET_KEY"
+        const val RESULT_KEY = "RESULT_KEY"
     }
 }

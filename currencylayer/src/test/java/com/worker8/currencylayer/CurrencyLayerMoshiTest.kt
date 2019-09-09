@@ -7,8 +7,8 @@ import org.junit.Test
 import java.io.BufferedReader
 
 class CurrencyLayerMoshiTest {
-    lateinit var moshi: Moshi
-    val json: String by lazy {
+    private lateinit var moshi: Moshi
+    private val json: String by lazy {
         val inputStream = javaClass.classLoader.getResourceAsStream("usd_based_currencies.json")
         inputStream.bufferedReader().use(BufferedReader::readText)
     }

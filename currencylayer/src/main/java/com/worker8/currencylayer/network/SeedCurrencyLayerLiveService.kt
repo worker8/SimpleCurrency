@@ -6,7 +6,7 @@ import com.worker8.currencylayer.response.UsdCurrencyResponse
 import java.io.BufferedReader
 
 class SeedCurrencyLayerLiveService(val moshi: Moshi) {
-    val json: String by lazy {
+    private val json: String by lazy {
         val inputStream = javaClass.classLoader.getResourceAsStream("usd_based_currencies.json")
         inputStream.bufferedReader().use(BufferedReader::readText)
     }

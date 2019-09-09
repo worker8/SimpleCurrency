@@ -7,10 +7,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
 import com.worker8.simplecurrency.R
-import com.worker8.simplecurrency.addTo
+import com.worker8.simplecurrency.common.addTo
 import com.worker8.simplecurrency.ui.picker.PickerActivity
 import dagger.android.support.DaggerAppCompatActivity
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +24,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var repo: MainRepo
-    val PICKER_BASE_REQUEST_CODE = 3832
+    private val PICKER_BASE_REQUEST_CODE = 3832
     val PICKER_TARGET_REQUEST_CODE = 3833
 
     override fun onCreate(savedInstanceState: Bundle?) {

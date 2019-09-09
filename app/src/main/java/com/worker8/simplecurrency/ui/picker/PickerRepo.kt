@@ -19,16 +19,15 @@ class PickerRepo @Inject constructor(
     val db: SimpleCurrencyDatabase,
     val schedulerSharedRepo: SchedulerSharedRepo
 ) {
-    fun getAllCurrenciesFromDb(searchText: String) =
+    fun getAllCurrenciesFromDb(searchText: String): Observable<List<RoomConversionRate>> =
         db.roomConversionRateDao().findRoomConversionRateFlowable(
-            "%USD${searchText}%",
-            "%${searchText}%"
+            "%USD$searchText%",
+            "%$searchText%"
         ).toObservable()
 
     fun getBaseRate(): List<RoomConversionRate> {
-        val baseCurrency = getSelectedBaseCurrencyCode() // "JPY"
-        val foundList = db.roomConversionRateDao().findConversionRate("USD${baseCurrency}")
-        return foundList
+        val baseCurrency = getSelectedBaseCurrencyCode()
+        return db.roomConversionRateDao().findConversionRate("USD$baseCurrency")
     }
 
     fun getLatestUpdatedDate(): Observable<String> {
@@ -38,7 +37,7 @@ class PickerRepo @Inject constructor(
             if (foundList.isNotEmpty()) {
                 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm a")
                 val zonedDateTime = ZonedDateTime.ofInstant(
-                    Instant.ofEpochSecond(foundList.get(0).updatedAt),
+                    Instant.ofEpochSecond(foundList[0].updatedAt),
                     ZoneId.systemDefault()
                 )
                 zonedDateTime.format(formatter)
@@ -48,10 +47,4 @@ class PickerRepo @Inject constructor(
 
     fun getSelectedBaseCurrencyCode() =
         MainPreference.getSelectedBaseCurrencyCode(context)
-
-    fun setSelectedBaseCurrencyCode(currencyCode: String) =
-        MainPreference.setSelectedBaseCurrencyCode(context, currencyCode)
-
-    fun setSelectedTargetCurrencyCode(currencyCode: String) =
-        MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 }

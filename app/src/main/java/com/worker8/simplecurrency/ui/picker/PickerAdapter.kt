@@ -4,12 +4,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class PickerAdapter(val isBase: Boolean) :
+class PickerAdapter(private val isBase: Boolean) :
     ListAdapter<PickerAdapter.PickerRowType, RecyclerView.ViewHolder>(comparator) {
     private val clickSubject: PublishSubject<String> = PublishSubject.create()
-    val selectedCurrencyCode = clickSubject.hide()
+    val selectedCurrencyCode: Observable<String> = clickSubject.hide()
 
     init {
         setHasStableIds(true)

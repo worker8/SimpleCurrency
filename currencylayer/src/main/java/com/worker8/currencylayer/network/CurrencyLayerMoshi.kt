@@ -5,7 +5,7 @@ import com.worker8.currencylayer.adapter.ConversionsFactory
 
 class CurrencyLayerMoshi {
     companion object {
-        fun build() = Moshi
+        fun build(): Moshi = Moshi
             .Builder()
             .add(ConversionsFactory())
             .build()

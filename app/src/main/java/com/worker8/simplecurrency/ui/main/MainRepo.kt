@@ -1,7 +1,9 @@
 package com.worker8.simplecurrency.ui.main
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.WorkManager
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
 import com.worker8.simplecurrency.common.MainPreference
@@ -10,11 +12,9 @@ import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
 import com.worker8.simplecurrency.di.scope.PerActivityScope
-import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -22,8 +22,8 @@ import javax.inject.Inject
 class MainRepo @Inject constructor(
     private val context: Context,
     val db: SimpleCurrencyDatabase,
-    val moshi: Moshi,
-    val workManager: WorkManager,
+    private val moshi: Moshi,
+    private val workManager: WorkManager,
     val schedulerSharedRepo: SchedulerSharedRepo
 ) {
     fun populateDbIfFirstTime(): Observable<Boolean> {
@@ -55,14 +55,14 @@ class MainRepo @Inject constructor(
     fun setSelectedTargetCurrencyCode(currencyCode: String) =
         MainPreference.setSelectedTargetCurrencyCode(context, currencyCode)
 
-    fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
+    private fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
         val baseCurrency = getSelectedBaseCurrencyCode() // "JPY"
-        return db.roomConversionRateDao().findConversionRateFlowable("USD${baseCurrency}")
+        return db.roomConversionRateDao().findConversionRateFlowable("USD$baseCurrency")
     }
 
-    fun getTargetRateFlowable(): Flowable<List<RoomConversionRate>> {
+    private fun getTargetRateFlowable(): Flowable<List<RoomConversionRate>> {
         val targetCurrency = getSelectedTargetCurrencyCode() // "JPY"
-        return db.roomConversionRateDao().findConversionRateFlowable("USD${targetCurrency}")
+        return db.roomConversionRateDao().findConversionRateFlowable("USD$targetCurrency")
     }
 
     fun getLatestSelectedRateFlowable(): Flowable<Double> {
@@ -70,27 +70,26 @@ class MainRepo @Inject constructor(
             getBaseRateFlowable(),
             getTargetRateFlowable(),
             BiFunction<List<RoomConversionRate>, List<RoomConversionRate>, Double> { baseRateList, targetRateList ->
-                val rate = if (baseRateList.isNotEmpty() && targetRateList.isNotEmpty()) {
+                return@BiFunction if (baseRateList.isNotEmpty() && targetRateList.isNotEmpty()) {
                     targetRateList.first().rate / baseRateList.first().rate
                 } else {
                     -1.0
                 }
-                return@BiFunction rate
             })
     }
 
     fun setupPeriodicUpdate() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val updateCurrencyWorker =
-            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-        workManager.enqueueUniquePeriodicWork(
-            uniqueWorkerName,
-            ExistingPeriodicWorkPolicy.KEEP,
-            updateCurrencyWorker
-        )
+//        val updateCurrencyWorker =
+//            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
+//                .setConstraints(constraints)
+//                .build()
+//        workManager.enqueueUniquePeriodicWork(
+//            uniqueWorkerName,
+//            ExistingPeriodicWorkPolicy.KEEP,
+//            updateCurrencyWorker
+//        )
 
         /* uncomment the following for testing purpose */
 //        val oneTimeCurrencyWorker = OneTimeWorkRequest.Builder(UpdateCurrencyWorker::class.java)
@@ -100,6 +99,6 @@ class MainRepo @Inject constructor(
     }
 
     companion object {
-        val uniqueWorkerName = "get_latest_currency"
+        const val uniqueWorkerName = "get_latest_currency"
     }
 }

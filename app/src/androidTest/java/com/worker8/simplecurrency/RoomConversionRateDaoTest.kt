@@ -13,7 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RoomConversionRateDaoTest() {
+class RoomConversionRateDaoTest {
     private lateinit var roomConversionRateDao: RoomConversionRateDao
     private lateinit var db: SimpleCurrencyDatabase
 
@@ -29,18 +29,18 @@ class RoomConversionRateDaoTest() {
     @Test
     fun crudTest() {
         roomConversionRateDao.insert(
-            RoomConversionRate("USDJPY", 106.25984),
-            RoomConversionRate("USDKES", 103.910315),
-            RoomConversionRate("USDKGS", 69.85001),
-            RoomConversionRate("USDKHR", 4089.999831),
-            RoomConversionRate("USDKMF", 447.050295)
+            RoomConversionRate("USDJPY", 106.25984, "Japanese Yen"),
+            RoomConversionRate("USDKES", 103.910315, "Kenyan Shilling"),
+            RoomConversionRate("USDKGS", 69.85001, "Kyrgystani Som"),
+            RoomConversionRate("USDKHR", 4089.999831, "Cambodian Riel"),
+            RoomConversionRate("USDKMF", 447.050295, "Comorian Franc")
         )
 
         val list = roomConversionRateDao.getRoomConversionRateList()
         Assert.assertNotNull(list)
         Assert.assertEquals(5, list.size)
 
-        roomConversionRateDao.delete(RoomConversionRate("USDJPY", 106.25984))
+        roomConversionRateDao.delete(RoomConversionRate("USDJPY", 106.25984, "Japanese Yen"))
         val deletedList = roomConversionRateDao.getRoomConversionRateList()
         Assert.assertEquals(4, deletedList.size)
 

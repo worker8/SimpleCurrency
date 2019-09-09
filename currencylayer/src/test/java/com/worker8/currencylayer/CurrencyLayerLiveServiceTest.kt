@@ -8,8 +8,8 @@ import org.junit.Test
 import retrofit2.Retrofit
 
 class CurrencyLayerLiveServiceTest {
-    lateinit var service: CurrencyLayerLiveService
-    lateinit var retrofit: Retrofit
+    private lateinit var service: CurrencyLayerLiveService
+    private lateinit var retrofit: Retrofit
 
     @Before
     fun setup() {
