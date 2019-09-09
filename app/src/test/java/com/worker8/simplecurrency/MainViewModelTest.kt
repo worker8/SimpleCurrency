@@ -4,9 +4,11 @@ import com.worker8.simplecurrency.ui.main.MainContract
 import com.worker8.simplecurrency.ui.main.MainRepoInterface
 import com.worker8.simplecurrency.ui.main.MainViewModel
 import io.mockk.*
+import io.reactivex.observers.TestObserver
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -108,8 +110,92 @@ class MainViewModelTest {
     }
 
     @Test
-    fun testConversion() {
+    fun testSimpleConversion() {
+        // 1. arrange
+        val fakeRate = 2.0
         viewModel.onCreate()
+        val screenStateTestObserver = viewModel.screenState.test()
+
+        // 2. act
+        populateDbIfFirstTime.onNext(true)
+        getLatestSelectedRateFlowable.offer(fakeRate)
+
+        onNumpad1Click.onNext('1')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+
+        // 3. assert
         verify(exactly = 1) { repo.setupPeriodicUpdate() }
+        screenStateTestObserver.assertNoErrors()
+
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals(. outputNumberString, "200")
+        }
     }
+
+    @Test
+    fun testDecimalConversion() {
+        // 1. arrange
+        val fakeRate = 2.0
+        viewModel.onCreate()
+        val screenStateTestObserver = viewModel.screenState.test()
+
+        // 2. act
+        populateDbIfFirstTime.onNext(true)
+        getLatestSelectedRateFlowable.offer(fakeRate)
+
+        // key in: 99.2
+        onNumpad1Click.onNext('9')
+        onNumpad0Click.onNext('9')
+        onNumpad0Click.onNext('.')
+        onNumpad0Click.onNext('2')
+
+        // 3. assert
+        verify(exactly = 1) { repo.setupPeriodicUpdate() }
+        screenStateTestObserver.assertNoErrors()
+
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals(outputNumberString, "198.4") // 99.2 * 2 = 198.4
+        }
+    }
+
+    @Test
+    fun testBigNumberWithCommaConversion() {
+        // 1. arrange
+        val fakeRate = 2.0
+        viewModel.onCreate()
+        val screenStateTestObserver = viewModel.screenState.test()
+
+        // 2. act
+        populateDbIfFirstTime.onNext(true)
+        getLatestSelectedRateFlowable.offer(fakeRate)
+
+        // key in: 1,000,123.2
+        onNumpad1Click.onNext('1')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('1')
+        onNumpad0Click.onNext('2')
+        onNumpad0Click.onNext('3')
+        onNumpad0Click.onNext('.')
+        onNumpad0Click.onNext('2')
+
+        // 3. assert
+        verify(exactly = 1) { repo.setupPeriodicUpdate() }
+        screenStateTestObserver.assertNoErrors()
+
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals(inputNumberString, "1,000,123.2")
+            Assert.assertEquals(outputNumberString, "2,000,246.4") // 1,000,123.2 * 2
+        }
+    }
+
+    @Test
+    fun testChangeCurrency() {
+
+    }
+
+    private val TestObserver<MainContract.ScreenState>.lastValue
+        get() = this.values().last()
 }
