@@ -31,20 +31,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="🇯🇵"
         android:textColor="@android:color/white"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1"
+        tools:text="🇯🇵" />
 
     <TextView
         android:id="@+id/mainInputCurrencyLabelFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="FROM"
+        android:text="@string/from"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/mainGuideline1"
         app:layout_constraintStart_toEndOf="@id/mainInputFlag" />
@@ -53,12 +53,12 @@
         android:id="@+id/mainInputCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="JPY"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/mainInputCurrencyLabelFrom"
-        app:layout_constraintTop_toBottomOf="@id/mainGuideline1" />
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline1"
+        tools:text="JPY" />
 
     <TextView
         android:id="@+id/mainInputNumber"
@@ -68,14 +68,14 @@
         android:ellipsize="middle"
         android:gravity="end"
         android:singleLine="true"
-        android:text="123.00"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
         app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toEndOf="@id/mainInputCurrency"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1"
+        tools:text="123.00" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mainFab"
@@ -96,31 +96,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="🇺🇸"
         android:textColor="@android:color/white"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline3"
+        tools:text="🇺🇸" />
 
     <TextView
         android:id="@+id/mainOutputCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="USD"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/mainOutputCurrencyLabelTo"
-        app:layout_constraintTop_toBottomOf="@id/mainGuideline3" />
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline3"
+        tools:text="USD" />
 
     <TextView
         android:id="@+id/mainOutputCurrencyLabelTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="TO"
+        android:text="@string/to"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/mainGuideline3"
         app:layout_constraintStart_toEndOf="@id/mainOutputFlag" />
@@ -133,14 +133,14 @@
         android:ellipsize="middle"
         android:gravity="end"
         android:singleLine="true"
-        android:text="89.00"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
         app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toEndOf="@id/mainOutputCurrency"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline3"
+        tools:text="89.00" />
 
     <View
         android:layout_width="0dp"

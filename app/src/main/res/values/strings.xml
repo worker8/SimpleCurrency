@@ -2,4 +2,6 @@
     <string name="app_name">Simple Currency</string>
     <string name="search_currencies">Search currencies by name or code</string>
     <string name="last_updated">Last Updated</string>
+    <string name="from">FROM</string>
+    <string name="to">TO</string>
 </resources>

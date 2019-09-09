@@ -31,20 +31,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="🇯🇵"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1"
+        tools:text="🇯🇵" />
 
     <TextView
         android:id="@+id/mainInputCurrencyLabelFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="FROM"
+        android:text="@string/from"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/mainGuideline1"
         app:layout_constraintStart_toEndOf="@id/mainInputFlag" />
@@ -53,12 +53,12 @@
         android:id="@+id/mainInputCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="JPY"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/mainInputCurrencyLabelFrom"
-        app:layout_constraintTop_toBottomOf="@id/mainGuideline1" />
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline1"
+        tools:text="JPY" />
 
     <TextView
         android:id="@+id/mainInputNumber"
@@ -95,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="🇺🇸"
+        tools:text="🇺🇸"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:visibility="invisible"
@@ -107,7 +107,7 @@
         android:id="@+id/mainOutputCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="USD"
+        tools:text="USD"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -119,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="TO"
+        android:text="@string/to"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/mainGuideline3"
         app:layout_constraintStart_toEndOf="@id/mainOutputFlag" />
