@@ -113,7 +113,6 @@ class MainViewModel(private val repo: MainRepoInterface) :
 
     private fun setupInputEvents() {
         disposableBag.clear()
-        disposableBag.clear()
 
         onTargetCurrencyClickedShared = input.onTargetCurrencyClicked.share()
         backSpaceLongClickSharedObservable = input.backSpaceLongClick.map { "0" }.share()
@@ -138,7 +137,6 @@ class MainViewModel(private val repo: MainRepoInterface) :
 
     override fun onCleared() {
         super.onCleared()
-        disposableBag.dispose()
         disposableBag.dispose()
     }
 
