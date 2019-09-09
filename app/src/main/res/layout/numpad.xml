@@ -1,194 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_100"
-    android:columnCount="3"
-    android:rowCount="4">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/mainNum7"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_margin="1dp"
-        android:background="@drawable/ripple"
-        android:clickable="true"
-        android:gravity="center"
-        android:text="7"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/mainNum8"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="8"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="7"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mainNum9"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="9"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="8"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mainNum4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="4"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="9"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/mainNum5"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="5"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/mainNum6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="6"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mainNum1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="1"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="5"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mainNum2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="2"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="6"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/mainNum3"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="3"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/mainNumDot"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="."
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mainNum0"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="0"
-        android:textColor="@android:color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/mainNum2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mainNumBackspace"
-        android:layout_width="0dp"
+        <TextView
+            android:id="@+id/mainNum3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="3"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/ripple"
-        android:gravity="center"
-        android:text="x"
-        android:textColor="@android:color/black"
-        android:textSize="25dp"
-        android:textStyle="bold" />
-</GridLayout>
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/mainNumDot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="."
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/mainNum0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/mainNumBackspace"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:gravity="center"
+            android:text="x"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</LinearLayout>
+
