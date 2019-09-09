@@ -10,8 +10,6 @@ import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
 import com.worker8.simplecurrency.di.DaggerAppComponent
-import com.worker8.simplecurrency.ui.main.MainRepo
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 class UpdateCurrencyWorker(appContext: Context, workerParams: WorkerParameters) :
@@ -34,7 +32,9 @@ class UpdateCurrencyWorker(appContext: Context, workerParams: WorkerParameters) 
             RoomConversionRate.fromConversionRate(it)
         }
         db.roomConversionRateDao().insert(roomConversionRateList)
-        db.roomUpdatedTimeStampDao().insert(RoomUpdatedTimeStamp("1", response.timestamp))
+        // the timestamp from the API doesn't update as frequently, so stamping our own time
+        db.roomUpdatedTimeStampDao()
+            .insert(RoomUpdatedTimeStamp("1", response.timestamp))
         Log.d("ddw", "done work, unix time: ${response.timestamp}")
         // Indicate whether the task finished successfully with the Result
         return Result.success()

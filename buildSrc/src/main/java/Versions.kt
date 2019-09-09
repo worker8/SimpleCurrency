@@ -31,7 +31,7 @@ class App {
 }
 
 class Debug {
-    val stetho = "1.5.0"
+    val stetho = "1.5.1"
 }
 
 class Test {

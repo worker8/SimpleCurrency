@@ -82,9 +82,8 @@ class MainRepo @Inject constructor(
     fun setupPeriodicUpdate() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED).build()
-
         val updateCurrencyWorker =
-            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 5, TimeUnit.HOURS)
+            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
         workManager.enqueueUniquePeriodicWork(

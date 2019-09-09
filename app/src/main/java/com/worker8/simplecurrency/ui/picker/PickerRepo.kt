@@ -38,7 +38,7 @@ class PickerRepo @Inject constructor(
             if (foundList.isNotEmpty()) {
                 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm a")
                 val zonedDateTime = ZonedDateTime.ofInstant(
-                    Instant.ofEpochSecond(foundList.get(0).unixTime),
+                    Instant.ofEpochSecond(foundList.get(0).updatedAt),
                     ZoneId.systemDefault()
                 )
                 zonedDateTime.format(formatter)
