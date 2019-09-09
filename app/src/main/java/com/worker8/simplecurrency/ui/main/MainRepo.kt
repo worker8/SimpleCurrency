@@ -91,6 +91,7 @@ class MainRepo @Inject constructor(
             ExistingPeriodicWorkPolicy.KEEP,
             updateCurrencyWorker
         )
+
         /* uncomment the following for testing purpose */
 //        val oneTimeCurrencyWorker = OneTimeWorkRequest.Builder(UpdateCurrencyWorker::class.java)
 //            .setConstraints(constraints)

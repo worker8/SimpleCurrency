@@ -81,9 +81,6 @@ class MainViewModel(private val repo: MainRepo) :
             }
             .addTo(disposableBag)
 
-//        backSpaceLongClickSharedObservable.subscribe { triggerCalculateSubject.onNext(it) }
-//            .addTo(calculateDisposableBag)
-
         calculateConversionRateSharedObservable
             .map { result ->
                 val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
@@ -120,12 +117,7 @@ class MainViewModel(private val repo: MainRepo) :
                 onCreate()
             }
             .addTo(calculateDisposableBag)
-//        input.backSpaceLongClick
-//            .doOnNext { Log.d("ddw", "long press") }
-//            .subscribe {
-//                onCreate()
-//            }
-//            .addTo(disposableBag)
+
         repo.setupPeriodicUpdate()
     }
 

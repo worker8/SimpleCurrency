@@ -1,7 +1,6 @@
 package com.worker8.simplecurrency.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.worker8.currencylayer.network.CurrencyLayerLiveService
@@ -32,11 +31,9 @@ class UpdateCurrencyWorker(appContext: Context, workerParams: WorkerParameters) 
             RoomConversionRate.fromConversionRate(it)
         }
         db.roomConversionRateDao().insert(roomConversionRateList)
-        // the timestamp from the API doesn't update as frequently, so stamping our own time
         db.roomUpdatedTimeStampDao()
             .insert(RoomUpdatedTimeStamp("1", response.timestamp))
-        Log.d("ddw", "done work, unix time: ${response.timestamp}")
-        // Indicate whether the task finished successfully with the Result
+
         return Result.success()
     }
 }
