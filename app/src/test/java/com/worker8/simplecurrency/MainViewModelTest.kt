@@ -129,7 +129,7 @@ class MainViewModelTest {
         screenStateTestObserver.assertNoErrors()
 
         screenStateTestObserver.lastValue.apply {
-            Assert.assertEquals(. outputNumberString, "200")
+            Assert.assertEquals(outputNumberString, "200")
         }
     }
 

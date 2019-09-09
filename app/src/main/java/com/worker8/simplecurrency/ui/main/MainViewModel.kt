@@ -18,7 +18,6 @@ class MainViewModel(private val repo: MainRepoInterface) :
     ViewModel(), LifecycleObserver {
     private val screenStateSubject = BehaviorSubject.createDefault(MainContract.ScreenState())
     private val disposableBag = CompositeDisposable()
-    private val calculateDisposableBag = CompositeDisposable()
     private val currentScreenState: MainContract.ScreenState get() = screenStateSubject.realValue
     var screenState: Observable<MainContract.ScreenState> = screenStateSubject.hide()
 
@@ -86,7 +85,7 @@ class MainViewModel(private val repo: MainRepoInterface) :
                     )
                 )
             }
-            .addTo(calculateDisposableBag)
+            .addTo(disposableBag)
 
         onTargetCurrencyClickedShared
             .subscribeOn(repo.mainThread)
@@ -97,7 +96,7 @@ class MainViewModel(private val repo: MainRepoInterface) :
                 })
             .observeOn(repo.mainThread)
             .subscribe { viewAction.navigateToSelectTargetCurrency(it) }
-            .addTo(calculateDisposableBag)
+            .addTo(disposableBag)
 
         input.swapButtonClick
             .subscribe {
@@ -107,14 +106,14 @@ class MainViewModel(private val repo: MainRepoInterface) :
                 repo.setSelectedTargetCurrencyCode(tempBaseCode)
                 onCreate()
             }
-            .addTo(calculateDisposableBag)
+            .addTo(disposableBag)
 
         repo.setupPeriodicUpdate()
     }
 
     private fun setupInputEvents() {
         disposableBag.clear()
-        calculateDisposableBag.clear()
+        disposableBag.clear()
 
         onTargetCurrencyClickedShared = input.onTargetCurrencyClicked.share()
         backSpaceLongClickSharedObservable = input.backSpaceLongClick.map { "0" }.share()
@@ -140,7 +139,7 @@ class MainViewModel(private val repo: MainRepoInterface) :
     override fun onCleared() {
         super.onCleared()
         disposableBag.dispose()
-        calculateDisposableBag.dispose()
+        disposableBag.dispose()
     }
 
     private fun dispatch(screenState: MainContract.ScreenState) {
