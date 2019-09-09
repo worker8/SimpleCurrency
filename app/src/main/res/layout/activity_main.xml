@@ -68,27 +68,27 @@
         android:ellipsize="middle"
         android:gravity="end"
         android:singleLine="true"
-        android:text="123.00"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/mainInputCurrency"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline1" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline1"
+        tools:text="123.00" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mainFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:foregroundTint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_swap_btn"
+        android:src="@drawable/ic_swap_button"
         app:backgroundTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline2" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline2"
+        app:tint="@color/colorPrimaryDark" />
 
     <TextView
         android:id="@+id/mainOutputFlag"
@@ -132,14 +132,14 @@
         android:ellipsize="middle"
         android:gravity="end"
         android:singleLine="true"
-        android:text="89.00"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/mainOutputCurrency"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline3" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline3"
+        tools:text="89.00" />
 
     <View
         android:layout_width="0dp"

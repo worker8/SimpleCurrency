@@ -82,14 +82,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:foregroundTint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_swap_btn"
+        android:src="@drawable/ic_swap_button"
         android:tint="@android:color/white"
         app:backgroundTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/mainGuideline2"
         app:layout_constraintEnd_toEndOf="@id/mainGuidelineHorizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mainGuideline2" />
+        app:layout_constraintTop_toTopOf="@id/mainGuideline2"
+        app:tint="@color/colorPrimaryDark" />
 
     <TextView
         android:id="@+id/mainOutputFlag"
