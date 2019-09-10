@@ -25,7 +25,7 @@ click to show screenshots
 
 | HomeScreen | CurrencyScreen 1  | CurrencyScreen 2 | Landscape |
 | - | - | - | - |
-| <img src="https://user-images.githubusercontent.com/1988156/64579200-fdfc6600-d3bc-11e9-8cab-84d64db38e92.png" width="300px" /> | <img src="https://user-images.githubusercontent.com/1988156/64579203-fe94fc80-d3bc-11e9-9f4a-abef0c1341c1.png" width="300px" />  | <img src="https://user-images.githubusercontent.com/1988156/64579204-fe94fc80-d3bc-11e9-9d68-d3310ba3f701.png" width="300px" />  | <img src="https://user-images.githubusercontent.com/1988156/64579202-fdfc6600-d3bc-11e9-8721-988788d725ed.png" width="400px" />|
+| <img src="https://user-images.githubusercontent.com/1988156/64579200-fdfc6600-d3bc-11e9-8cab-84d64db38e92.png" width="300px" /> | <img src="https://user-images.githubusercontent.com/1988156/64591574-1b452a80-d3e5-11e9-8f81-fa4cbff5aece.png" width="300px" />  | <img src="https://user-images.githubusercontent.com/1988156/64591575-1b452a80-d3e5-11e9-9140-c546466f4f47.png" width="300px" />  | <img src="https://user-images.githubusercontent.com/1988156/64579202-fdfc6600-d3bc-11e9-8721-988788d725ed.png" width="400px" />|
 </details>
 
 ## Features
@@ -36,6 +36,7 @@ click to show screenshots
 - automatic currency rate updates every 30 minutes
 - pick from 168 currencies
 - filter currency by currency name or code in currency picker
+- comma seperation for big numbers
 
 ## How to Setup
 The API used for obtaining the latest currency data is [CurrencyLayer.com](https://currencylayer.com). A free account can be made easily and it will provide an API key. You need to fill up the API key in `api_keys.properties` file at the root of this project. Instructions:
