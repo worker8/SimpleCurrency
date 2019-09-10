@@ -162,6 +162,10 @@ It is actually doing these:
 ```
 Since the fake conversaion rate is set to `2.0`, the output should be `200` when input is `100`.
 
+## Debugging
+[Stetho](http://facebook.github.io/stetho/) library is used for debugging purpose. Network calls through OkHttp3 and SQLite Database can be viewed by accessing `chrome://inspect/#devices` on a chrome browser. This is an example of how the database look like in DevTools: [devtool db debug screenshot](https://user-images.githubusercontent.com/1988156/64595502-09678580-d3ed-11e9-9a08-659d21389d51.png).
+
+
 ## Adaptive Icon
 An adaptive icon is created using Sketch. The sketch file can be found in [`logo.sketch`](https://github.com/worker8/SimpleCurrency/blob/master/logo.sketch) file at the root of this project.
 
