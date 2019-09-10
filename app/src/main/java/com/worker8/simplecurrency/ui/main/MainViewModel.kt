@@ -1,10 +1,10 @@
 package com.worker8.simplecurrency.ui.main
 
 import androidx.lifecycle.*
-import com.worker8.simplecurrency.common.util.NumberFormatterUtil
 import com.worker8.simplecurrency.common.addTo
 import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.common.realValue
+import com.worker8.simplecurrency.common.util.NumberFormatterUtil
 import com.worker8.simplecurrency.ui.main.event.BackSpaceInputEvent
 import com.worker8.simplecurrency.ui.main.event.CalculateConversionRateEvent
 import com.worker8.simplecurrency.ui.main.event.NewNumberInputEvent
@@ -149,7 +149,7 @@ class MainViewModel(private val repo: MainRepoInterface) :
         super.onCleared()
         disposableBag.dispose()
     }
-
+    
     private fun dispatch(screenState: MainContract.ScreenState) {
         screenStateSubject.onNext(screenState)
     }

@@ -18,3 +18,10 @@ fun Double.toTwoDecimalWithComma(): String {
     val bigDecimal = this.toBigDecimal().setScale(2, RoundingMode.HALF_UP)
     return decimalFormat.format(bigDecimal)
 }
+
+fun Double.toThreeDecimalWithComma(): String {
+    val decimalFormat = DecimalFormat("#,###.###")
+    decimalFormat.decimalFormatSymbols = DecimalFormatSymbols(Locale.getDefault())
+    val bigDecimal = this.toBigDecimal().setScale(3, RoundingMode.HALF_UP)
+    return decimalFormat.format(bigDecimal)
+}

@@ -3,6 +3,7 @@ package com.worker8.simplecurrency.ui.picker
 import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.common.addTo
+import com.worker8.simplecurrency.common.extension.toThreeDecimalWithComma
 import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.common.realValue
 import io.reactivex.Observable
@@ -39,8 +40,8 @@ class PickerViewModel(private val repo: PickerRepo) :
                             val baseToTargetRate = (rate / baseCurrency)
                             PickerAdapter.PickerRowType(
                                 currencyName = Currency.ALL[getCodeWithoutUSD()] ?: "",
-                                currencyRate = "1 ${repo.getSelectedBaseCurrencyCode()} = ${rate.toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
-                                currencyRateCalculated = "$inputAmount ${repo.getSelectedBaseCurrencyCode()} = ${(inputAmount * baseToTargetRate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
+                                currencyRate = "1 ${repo.getSelectedBaseCurrencyCode()} = ${baseToTargetRate.toThreeDecimalWithComma()} ${getCodeWithoutUSD()}",
+                                currencyRateCalculated = "${inputAmount.toTwoDecimalWithComma()} ${repo.getSelectedBaseCurrencyCode()} = ${(inputAmount * baseToTargetRate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
                                 currencyCode = getCodeWithoutUSD()
                             )
                         })
