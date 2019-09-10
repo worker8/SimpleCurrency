@@ -38,11 +38,36 @@ click to show screenshots
 - filter currency by currency name or code in currency picker
 
 ## Tech Explanation
+The following dependencies are used in this project:
+- RxJava
+- RxBinding
+- Dagger2
+- Retrofit
+- Moshi
+- Room
+- Android Arch Lifecycle
+- Android Arch ViewModel 
+- WorkManager
+- Material Design Library
+- Mockk
+- JUnit
+- etc..
+
 ### Programming Language
 This project is written in Kotlin.
 
 ### Architecture
-MVVM is used in this app. The view layer is made reactive... 👷‍♂️
+MVVM is used in this app. The view layer is made reactive and passed into the `ViewModel` as the input. External souces that are needed (such as database access, network calls, shared preference access) will be passed into `ViewModel` as `Repo`. This way `ViewModel` doesn't have access to Android related code. Without the need of accessing `Context`, `ViewModel` can be unit tested, e.g. ([MainViewModelTest.kt](https://github.com/worker8/SimpleCurrency/blob/master/app/src/test/java/com/worker8/simplecurrency/MainViewModelTest.kt)).
+
+Room Persistance library is used to access SQLite easily. This is used to store the currency data. `USD` is used as the base currency, so all the currency stored in the database is referenced against `USD`. Let's say we wanted to find out `Japanese Yen (JPY)` vs. `Pound Sterling (GBP)`, simple math calculation will be done.
+
+In every periodic interval (currently set at every 30 minutes), the WorkManager will fire up a Retrofit call to get the latest currency rate. The obtained json will be deserialized by Moshi and write into the database.
+
+### Unidirectional data flow & Immutable data
+...coming soon...
+
+### Unit Test
+... coming soon ...
 
 ## Adaptive Icon
 Adaptive icon is created using Sketch. The sketch file can be found in `logo.sketch` file in the root of this project.
