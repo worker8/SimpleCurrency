@@ -37,6 +37,9 @@ click to show screenshots
 - pick from 168 currencies
 - filter currency by currency name or code in currency picker
 
+## How to Setup
+... coming soon... add api_properties blabla...
+
 ## Tech Explanation
 The following dependencies are used in this project:
 - RxJava
