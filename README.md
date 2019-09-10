@@ -32,13 +32,13 @@ click to show screenshots
 - convert currency from one to another
 - support decimal point
 - long press on `'x'` will clear all input
-- swap button to switch between base and target currency quickly
-- auto currency rate update every 30 minutes
+- swap button to switch between the base and target currency quickly
+- automatic currency rate updates every 30 minutes
 - pick from 168 currencies
 - filter currency by currency name or code in currency picker
 
 ## How to Setup
-The API used for obtaining the latest currency data is [CurrencyLayer.com](https://currencylayer.com). Free account can be made easily and it will provide an API key. You need to fill up the API key in `api_keys.properties` file in the root of this project. Instructions:
+The API used for obtaining the latest currency data is [CurrencyLayer.com](https://currencylayer.com). A free account can be made easily and it will provide an API key. You need to fill up the API key in `api_keys.properties` file at the root of this project. Instructions:
 
 1. make a file named `api_keys.properties` in the root of the project
 2. add this line in the file: `CURRENCY_LAYER_ACCESS_TOKEN=<fill in API key obtained from Currency Layer>`
@@ -71,9 +71,9 @@ The following dependencies are used in this project:
 This project is written in Kotlin.
 
 ### Architecture
-MVVM is used in this app. The view layer is made reactive and passed into the `ViewModel` as the input. External souces that are needed (such as database access, network calls, shared preference access) will be passed into `ViewModel` as `Repo`. This way `ViewModel` doesn't have access to Android related code so that it can be unit tested.
+MVVM is used in this app. The view layer is made reactive and passed into the `ViewModel` as the input. External sources that are needed (such as database access, network calls, shared preference access) will be passed into `ViewModel` as `Repo`. This way `ViewModel` doesn't have access to Android-related code so that it can be unit tested.
 
-Room Persistance library is used to access SQLite easily. This is used to store the currency data. `USD` is used as the base currency, so all the currency stored in the database is referenced against `USD`. Let's say we wanted to find out `Japanese Yen (JPY)` vs. `Pound Sterling (GBP)`, simple math calculation will be done.
+Room Persistence library is used to access SQLite easily. This is used to store the currency data. `USD` is used as the base currency, so all the currency stored in the database is referenced against `USD`. Let's say we wanted to find out `Japanese Yen (JPY)` vs. `Pound Sterling (GBP)`, simple math calculation will be done.
 
 In every periodic interval (currently set at every 30 minutes), the `WorkManager` will fire up a Retrofit call to get the latest currency rate. The obtained json will be deserialized by Moshi and write into the database.
 
@@ -83,7 +83,7 @@ The project follows the unidirectional data flow rule to better structure the co
 Here's a brief diagram of the main activity architecture.
 <img src="https://user-images.githubusercontent.com/1988156/64588332-18ded280-d3dd-11e9-9fc5-75947217c329.png" width="600px"/>
 
-1. RxView - The flow begins from the views. Every user view interaction are reactive and fed into the `ViewModel`.
+1. RxView - The flow begins from the views. Every user view interactions are reactive and fed into the `ViewModel`.
 2. Repo - Any external data access that is not from the user interactions, such as network calls, shared preference, database access, etc... will all go through the `Repo` class that is passed into `ViewModel`.
 3. ScreenState - The reactive signals from `Views` will be processed inside `ViewModel` by some business logic. After that, it will produce the next `ScreenState` by using `.copy()` from Kotlin to ensure immutability.
 4. View Update - Finally, all the views will listen to the `ScreenState` and update itself accordingly.
@@ -98,7 +98,7 @@ The general idea of testing an Activity can be described by this diagram:
 
 <img src="https://user-images.githubusercontent.com/1988156/64589559-57c25780-d3e0-11e9-9726-95c5b654a4ca.png" width="600px"/>
 
-The `RxViews` signals are replaced by fake inputs from the test. Reactive RxBinding signals are be replaced by RxJava's `Subjects` , reactive database access `Flowable` are replaced by RxJava's `Processors`and normal method calls are mocked by `mockk`. This way, the user interactions can be controlled by us. After that, we can make `Assertion` on the `ScreenState` to check if it behaves correctly.
+The `RxViews` signals are replaced by fake inputs from the test. Reactive RxBinding signals are be replaced by RxJava's `Subjects` , reactive database access `Flowable` are replaced by RxJava's `Processors` and normal method calls are mocked by `mockk`. This way, user interactions can be controlled by us. After that, we can make `Assertion` on the `ScreenState` to check if it behaves correctly.
 
 Here's an example of testing a simple conversion ([MainViewModelTest.kt#L112](https://github.com/worker8/SimpleCurrency/blob/4f320e6d9cec77d78849f70d1f1ad1fa9b2dbdd8/app/src/test/java/com/worker8/simplecurrency/MainViewModelTest.kt#L112)):
 
@@ -153,7 +153,7 @@ Then we check on the output:
 Since the fake conversaion rate is set to `2.0`, the output should be `200` when input is `100`.
 
 ## Adaptive Icon
-Adaptive icon is created using Sketch. The sketch file can be found in [`logo.sketch`](https://github.com/worker8/SimpleCurrency/blob/master/logo.sketch) file in the root of this project.
+An adaptive icon is created using Sketch. The sketch file can be found in [`logo.sketch`](https://github.com/worker8/SimpleCurrency/blob/master/logo.sketch) file at the root of this project.
 
 ## Coding Style
 `.editorconfig` is used in this project to make sure that the spacing and indentations are standardized, the `editorconfig` is obtained from [ktlint project](https://github.com/shyiko/ktlint/blob/master/.editorconfig).
