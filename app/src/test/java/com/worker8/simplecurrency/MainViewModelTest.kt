@@ -87,7 +87,6 @@ class MainViewModelTest {
 
         repo = mockk(relaxed = true)
 
-
         every { repo.mainThread } returns Schedulers.trampoline()
         every { repo.backgroundThread } returns Schedulers.trampoline()
         every { repo.populateDbIfFirstTime() } returns populateDbIfFirstTime
@@ -129,7 +128,7 @@ class MainViewModelTest {
         screenStateTestObserver.assertNoErrors()
 
         screenStateTestObserver.lastValue.apply {
-            Assert.assertEquals(outputNumberString, "200")
+            Assert.assertEquals("200", outputNumberString)
         }
     }
 
@@ -155,7 +154,7 @@ class MainViewModelTest {
         screenStateTestObserver.assertNoErrors()
 
         screenStateTestObserver.lastValue.apply {
-            Assert.assertEquals(outputNumberString, "198.4") // 99.2 * 2 = 198.4
+            Assert.assertEquals("198.4", outputNumberString) // 99.2 * 2 = 198.4
         }
     }
 
@@ -186,8 +185,44 @@ class MainViewModelTest {
         screenStateTestObserver.assertNoErrors()
 
         screenStateTestObserver.lastValue.apply {
-            Assert.assertEquals(inputNumberString, "1,000,123.2")
-            Assert.assertEquals(outputNumberString, "2,000,246.4") // 1,000,123.2 * 2
+            Assert.assertEquals("1,000,123.2", inputNumberString)
+            Assert.assertEquals("2,000,246.4", outputNumberString) // 1,000,123.2 * 2
+        }
+    }
+
+    @Test
+    fun testBackSpaceLongPress() {
+        // 1. arrange
+        val fakeRate = 2.0
+        viewModel.onCreate()
+        val screenStateTestObserver = viewModel.screenState.test()
+
+        // 2. act
+        populateDbIfFirstTime.onNext(true)
+        getLatestSelectedRateFlowable.offer(fakeRate)
+
+        // key in: 1,000,123.2
+        onNumpad1Click.onNext('1')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+
+        backSpaceClick.onNext(Unit)
+
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals("10,000", inputNumberString)
+            Assert.assertEquals("20,000", outputNumberString)
+        }
+
+        backSpaceLongClick.onNext(Unit)
+
+        // 3. assert
+        screenStateTestObserver.assertNoErrors()
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals("0", inputNumberString)
+            Assert.assertEquals("0", outputNumberString)
         }
     }
 
@@ -207,8 +242,8 @@ class MainViewModelTest {
 
         // 3. assert - check initial state
         screenStateTestObserver.lastValue.apply {
-            Assert.assertEquals(baseCurrencyCode, "JPY")
-            Assert.assertEquals(targetCurrencyCode, "USD") // 1,000,123.2 * 2
+            Assert.assertEquals("JPY", baseCurrencyCode)
+            Assert.assertEquals("USD", targetCurrencyCode) // 1,000,123.2 * 2
         }
 
         // 2. act - hit swap button
@@ -222,8 +257,8 @@ class MainViewModelTest {
 
         // 3. assert - check if output is updated once currency is updated
         screenStateTestObserver.lastValue.apply {
-            Assert.assertEquals(inputNumberString, "100")
-            Assert.assertEquals(outputNumberString, "400") // 1,000,123.2 * 2
+            Assert.assertEquals("100", inputNumberString)
+            Assert.assertEquals("400", outputNumberString) // 1,000,123.2 * 2
         }
     }
 

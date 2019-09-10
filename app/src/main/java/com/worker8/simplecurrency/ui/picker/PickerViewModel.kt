@@ -90,8 +90,4 @@ class PickerViewModel(private val repo: PickerRepo) :
     }
 }
 
-//TODO: handle errors for .subscribe in all Rx stream
-//TODO: correctly scope things - public/private
-//TODO: lint check
 //TODO: style arrangement
-

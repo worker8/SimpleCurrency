@@ -18,5 +18,4 @@ class SeedCurrencyLayerLiveService(val moshi: Moshi) {
         val timestamp = response?.timestamp ?: 0
         return quotes to timestamp
     }
-
 }
