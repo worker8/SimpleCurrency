@@ -4,31 +4,17 @@ import android.content.Context
 import androidx.work.*
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
-import com.worker8.simplecurrency.common.MainPreference
+import com.worker8.simplecurrency.common.sharedPreference.MainPreference
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
 import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
 import com.worker8.simplecurrency.di.scope.ScopeConstant
-import com.worker8.simplecurrency.worker.UpdateCurrencyWorker
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
-
-interface MainRepoInterface {
-    val mainThread: Scheduler
-    val backgroundThread: Scheduler
-    fun populateDbIfFirstTime(): Observable<Boolean>
-    fun getSelectedBaseCurrencyCode(): String
-    fun getSelectedTargetCurrencyCode(): String
-    fun setSelectedBaseCurrencyCode(currencyCode: String): Boolean
-    fun setSelectedTargetCurrencyCode(currencyCode: String): Boolean
-    fun getLatestSelectedRateFlowable(): Flowable<Double>
-    fun setupPeriodicUpdate()
-}
 
 class MainRepo @Inject constructor(
     private val context: Context,
@@ -96,15 +82,15 @@ class MainRepo @Inject constructor(
     override fun setupPeriodicUpdate() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val updateCurrencyWorker =
-            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-        workManager.enqueueUniquePeriodicWork(
-            uniqueWorkerName,
-            ExistingPeriodicWorkPolicy.KEEP,
-            updateCurrencyWorker
-        )
+//        val updateCurrencyWorker =
+//            PeriodicWorkRequest.Builder(UpdateCurrencyWorker::class.java, 30, TimeUnit.MINUTES)
+//                .setConstraints(constraints)
+//                .build()
+//        workManager.enqueueUniquePeriodicWork(
+//            uniqueWorkerName,
+//            ExistingPeriodicWorkPolicy.KEEP,
+//            updateCurrencyWorker
+//        )
 
         /* uncomment the following for testing purpose */
 //        val oneTimeCurrencyWorker = OneTimeWorkRequest.Builder(UpdateCurrencyWorker::class.java)

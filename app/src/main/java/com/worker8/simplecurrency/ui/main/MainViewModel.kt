@@ -1,7 +1,7 @@
 package com.worker8.simplecurrency.ui.main
 
 import androidx.lifecycle.*
-import com.worker8.simplecurrency.common.NumberFormatter
+import com.worker8.simplecurrency.common.util.NumberFormatterUtil
 import com.worker8.simplecurrency.common.addTo
 import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
 import com.worker8.simplecurrency.common.realValue
@@ -47,7 +47,7 @@ class MainViewModel(private val repo: MainRepoInterface) :
             .subscribe({ newInputString ->
                 dispatch(
                     currentScreenState.copy(
-                        inputNumberString = NumberFormatter.addComma(newInputString),
+                        inputNumberString = NumberFormatterUtil.addComma(newInputString),
                         inputNumberStringState = newInputString,
                         isEnableDot = !newInputString.contains(".")
                     )

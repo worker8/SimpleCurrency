@@ -1,4 +1,4 @@
-package com.worker8.simplecurrency.common
+package com.worker8.simplecurrency.common.sharedPreference
 
 import android.content.Context
 

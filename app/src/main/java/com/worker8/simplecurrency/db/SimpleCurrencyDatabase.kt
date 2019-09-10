@@ -9,7 +9,8 @@ import com.worker8.simplecurrency.db.entity.RoomUpdatedTimeStamp
 
 @Database(
     entities = [RoomConversionRate::class, RoomUpdatedTimeStamp::class],
-    version = 1
+    version = 1,
+    exportSchema = false /* TODO: export schema when the app is launched */
 )
 abstract class SimpleCurrencyDatabase : RoomDatabase() {
     abstract fun roomConversionRateDao(): RoomConversionRateDao

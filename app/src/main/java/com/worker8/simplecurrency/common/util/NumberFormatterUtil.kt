@@ -1,8 +1,8 @@
-package com.worker8.simplecurrency.common
+package com.worker8.simplecurrency.common.util
 
 import com.worker8.simplecurrency.common.extension.toComma
 
-class NumberFormatter {
+class NumberFormatterUtil {
     companion object {
         fun addComma(s: String): String {
             val dotIndex = s.indexOf('.')
