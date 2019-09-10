@@ -129,8 +129,14 @@ Here's an example of testing a simple conversion ([MainViewModelTest.kt#L112](ht
 ```
 
 #### Description
-While doing the following: 
+1. Arrange - we first setup the necessary objects
+
+2. Act - next, we make some actions.
+
+While we run the following:
+
 ```kotlin
+        // 2. act
         populateDbIfFirstTime.onNext(true)
         getLatestSelectedRateFlowable.offer(fakeRate)
 
@@ -139,13 +145,13 @@ While doing the following:
         onNumpad0Click.onNext('0')
 ```
 
-We are saying, we have done the following:
+It is actually doing these:
 
 1. `populateDbIfFirstTime.onNext(true)` - seeded the db
-2. `getLatestSelectedRateFlowable.offer(fakeRate)` - `taken the latest conversion rate from db`
+2. `getLatestSelectedRateFlowable.offer(fakeRate)` - taken the latest conversion rate from db
 3. `onNumpad1Click.onNext('1')`, `onNumpad1Click.onNext('0')`, `onNumpad1Click.onNext('0')` - click on `1`, `0`, `0` (100) 
 
-Then we check on the output:
+3. Assert - finally, we check on the output:
 ```kotlin
         screenStateTestObserver.lastValue.apply {
             Assert.assertEquals("200", outputNumberString)
