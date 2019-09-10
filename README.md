@@ -37,6 +37,7 @@ click to show screenshots
 - pick from 168 currencies
 - filter currency by currency name or code in currency picker
 - comma seperation for big numbers
+- landscape mode supported
 
 ## How to Setup
 The API used for obtaining the latest currency data is [CurrencyLayer.com](https://currencylayer.com). A free account can be made easily and it will provide an API key. You need to fill up the API key in `api_keys.properties` file at the root of this project. Instructions:
@@ -77,6 +78,8 @@ MVVM is used in this app. The view layer is made reactive and passed into the `V
 Room Persistence library is used to access SQLite easily. This is used to store the currency data. `USD` is used as the base currency, so all the currency stored in the database is referenced against `USD`. Let's say we wanted to find out `Japanese Yen (JPY)` vs. `Pound Sterling (GBP)`, simple math calculation will be done.
 
 In every periodic interval (currently set at every 30 minutes), the `WorkManager` will fire up a Retrofit call to get the latest currency rate. The obtained json will be deserialized by Moshi and write into the database.
+
+The currency layer network library is extracted into a separate **module** so that it can be decoupled from the main app. It can be launched as a standalone separate network library or being swapped out and replaced by another currency API.
 
 ### Unidirectional data flow & Immutable data
 The project follows the unidirectional data flow rule to better structure the code.
