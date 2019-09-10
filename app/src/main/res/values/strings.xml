@@ -4,4 +4,5 @@
     <string name="last_updated">Last Updated</string>
     <string name="from">FROM</string>
     <string name="to">TO</string>
+    <string name="error_message">Ops, there is an error, please restart the app…</string>
 </resources>

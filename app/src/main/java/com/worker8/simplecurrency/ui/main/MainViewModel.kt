@@ -3,8 +3,8 @@ package com.worker8.simplecurrency.ui.main
 import androidx.lifecycle.*
 import com.worker8.simplecurrency.common.NumberFormatter
 import com.worker8.simplecurrency.common.addTo
-import com.worker8.simplecurrency.common.realValue
 import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
+import com.worker8.simplecurrency.common.realValue
 import com.worker8.simplecurrency.ui.main.event.BackSpaceInputEvent
 import com.worker8.simplecurrency.ui.main.event.CalculateConversionRateEvent
 import com.worker8.simplecurrency.ui.main.event.NewNumberInputEvent
@@ -53,22 +53,26 @@ class MainViewModel(private val repo: MainRepoInterface) :
                     )
                 )
             }, {
-                it.printStackTrace()
+                viewAction.showTerminalError()
             })
             .addTo(disposableBag)
 
         input.onBaseCurrencyChanged
-            .subscribe {
+            .subscribe({
                 repo.setSelectedBaseCurrencyCode(it)
                 onCreate()
-            }
+            }, {
+                viewAction.showTerminalError()
+            })
             .addTo(disposableBag)
 
         input.onTargetCurrencyChanged
-            .subscribe {
+            .subscribe({
                 repo.setSelectedTargetCurrencyCode(it)
                 onCreate()
-            }
+            }, {
+                viewAction.showTerminalError()
+            })
             .addTo(disposableBag)
 
         calculateConversionRateSharedObservable
@@ -76,7 +80,7 @@ class MainViewModel(private val repo: MainRepoInterface) :
                 val (input, rate) = result.getOrDefault(Pair(0.0, 0.0))
                 input to input * rate
             }
-            .subscribe { (input, outputCurrency) ->
+            .subscribe({ (input, outputCurrency) ->
                 dispatch(
                     currentScreenState.copy(
                         baseCurrencyCode = repo.getSelectedBaseCurrencyCode(),
@@ -84,7 +88,9 @@ class MainViewModel(private val repo: MainRepoInterface) :
                         outputNumberString = outputCurrency.toTwoDecimalWithComma()
                     )
                 )
-            }
+            }, {
+                viewAction.showTerminalError()
+            })
             .addTo(disposableBag)
 
         onTargetCurrencyClickedShared
@@ -95,17 +101,21 @@ class MainViewModel(private val repo: MainRepoInterface) :
                     input
                 })
             .observeOn(repo.mainThread)
-            .subscribe { viewAction.navigateToSelectTargetCurrency(it) }
+            .subscribe({ viewAction.navigateToSelectTargetCurrency(it) }, {
+                viewAction.showTerminalError()
+            })
             .addTo(disposableBag)
 
         input.swapButtonClick
-            .subscribe {
+            .subscribe({
                 val tempBaseCode = repo.getSelectedBaseCurrencyCode()
                 val tempTargetCode = repo.getSelectedTargetCurrencyCode()
                 repo.setSelectedBaseCurrencyCode(tempTargetCode)
                 repo.setSelectedTargetCurrencyCode(tempBaseCode)
                 onCreate()
-            }
+            }, {
+                viewAction.showTerminalError()
+            })
             .addTo(disposableBag)
 
         repo.setupPeriodicUpdate()

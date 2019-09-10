@@ -3,8 +3,8 @@ package com.worker8.simplecurrency.ui.picker
 import androidx.lifecycle.*
 import com.worker8.currencylayer.model.Currency
 import com.worker8.simplecurrency.common.addTo
-import com.worker8.simplecurrency.common.realValue
 import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
+import com.worker8.simplecurrency.common.realValue
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -19,7 +19,7 @@ class PickerViewModel(private val repo: PickerRepo) :
         screenStateSubject.hide().observeOn(repo.mainThread)
     private val disposableBag = CompositeDisposable()
     lateinit var input: PickerContract.Input
-
+    lateinit var viewAction: PickerContract.ViewAction
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         input.apply {
@@ -47,22 +47,26 @@ class PickerViewModel(private val repo: PickerRepo) :
                     }
                     resultSet
                 }
-                .subscribe {
+                .subscribe({
                     dispatch(currentScreenState.copy(currencyList = it))
-                }
+                }, {
+                    viewAction.showTerminalError()
+                })
                 .addTo(disposableBag)
 
             repo.getLatestUpdatedDate()
                 .subscribeOn(repo.backgroundThread)
                 .observeOn(repo.mainThread)
-                .subscribe {
+                .subscribe({
                     dispatch(
                         currentScreenState.copy(
                             rateDetailVisibility = !isBase,
                             latestUpdatedString = it
                         )
                     )
-                }
+                }, {
+                    viewAction.showTerminalError()
+                })
                 .addTo(disposableBag)
 
         }

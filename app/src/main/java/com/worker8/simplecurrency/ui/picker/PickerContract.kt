@@ -10,6 +10,10 @@ class PickerContract {
         val inputAmount: Double
     }
 
+    interface ViewAction {
+        fun showTerminalError()
+    }
+
     data class ScreenState(
         val currencyList: LinkedHashSet<PickerAdapter.PickerRowType>,
         val rateDetailVisibility: Boolean,

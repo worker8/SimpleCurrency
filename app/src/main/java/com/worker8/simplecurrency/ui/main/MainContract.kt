@@ -25,6 +25,8 @@ class MainContract {
 
     interface ViewAction {
         fun navigateToSelectTargetCurrency(inputAmount: Double)
+        /* show this in a case of unrecoverable error */
+        fun showTerminalError()
     }
 
     data class ScreenState(

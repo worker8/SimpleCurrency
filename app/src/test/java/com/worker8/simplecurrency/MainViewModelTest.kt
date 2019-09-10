@@ -192,8 +192,39 @@ class MainViewModelTest {
     }
 
     @Test
-    fun testChangeCurrency() {
+    fun testSwapCurrency() {
+        // 1. arrange
+        val fakeRate = 2.0
+        viewModel.onCreate()
+        val screenStateTestObserver = viewModel.screenState.test()
 
+        // 2. act
+        populateDbIfFirstTime.onNext(true)
+        getLatestSelectedRateFlowable.offer(fakeRate)
+        onNumpad1Click.onNext('1')
+        onNumpad0Click.onNext('0')
+        onNumpad0Click.onNext('0')
+
+        // 3. assert - check initial state
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals(baseCurrencyCode, "JPY")
+            Assert.assertEquals(targetCurrencyCode, "USD") // 1,000,123.2 * 2
+        }
+
+        // 2. act - hit swap button
+        verify(exactly = 4) {
+            repo.getSelectedBaseCurrencyCode()
+        }
+
+        swapButtonClick.onNext(Unit)
+        populateDbIfFirstTime.onNext(true)
+        getLatestSelectedRateFlowable.offer(4.0) // not using real db here, update manually
+
+        // 3. assert - check if output is updated once currency is updated
+        screenStateTestObserver.lastValue.apply {
+            Assert.assertEquals(inputNumberString, "100")
+            Assert.assertEquals(outputNumberString, "400") // 1,000,123.2 * 2
+        }
     }
 
     private val TestObserver<MainContract.ScreenState>.lastValue

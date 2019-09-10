@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
 import com.worker8.simplecurrency.R
@@ -60,6 +61,11 @@ class MainActivity : DaggerAppCompatActivity() {
                     }
                 startActivityForResult(intent, PICKER_TARGET_REQUEST_CODE)
             }
+
+            override fun showTerminalError() {
+                Snackbar.make(mainContainer, R.string.error_message, Snackbar.LENGTH_INDEFINITE)
+                    .show()
+            }
         }
         val viewModel =
             ViewModelProviders.of(this, MainViewModel.MainViewModelFactory(repo))
@@ -76,7 +82,7 @@ class MainActivity : DaggerAppCompatActivity() {
         viewModel.screenState
             .distinctUntilChanged()
             .observeOn(repo.mainThread)
-            .subscribe {
+            .subscribe({
                 it.apply {
                     mainInputCurrency.text = baseCurrencyCode
                     mainOutputCurrency.text = targetCurrencyCode
@@ -84,8 +90,11 @@ class MainActivity : DaggerAppCompatActivity() {
                     mainOutputNumber.text = outputNumberString
                     mainNumDot.isEnabled = isEnableDot
                 }
-            }
+            }, {
+                viewActionLocal.showTerminalError()
+            })
             .addTo(disposableBag)
+        
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
