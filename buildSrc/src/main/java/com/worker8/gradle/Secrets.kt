@@ -1,10 +1,13 @@
+package com.worker8.gradle
+
 import java.io.File
-import java.io.FileInputStream
 import java.util.*
 
 object Secrets {
     private const val CURRENCY_LAYER_ACCESS_TOKEN = "CURRENCY_LAYER_ACCESS_TOKEN"
-    val currencyLayerAccessToken: String = apiKeysProperties().getProperty(CURRENCY_LAYER_ACCESS_TOKEN)
+    val currencyLayerAccessToken: String by lazy {
+        apiKeysProperties().getProperty(CURRENCY_LAYER_ACCESS_TOKEN)
+    }
 
     private fun apiKeysProperties(): Properties {
         val filename = "api_keys.properties"
@@ -18,8 +21,12 @@ object Secrets {
                     "$CURRENCY_LAYER_ACCESS_TOKEN=d028f7h3hd.....h73h7hcj83\n"
             )
         }
-        val properties = Properties()
-        properties.load(FileInputStream(file))
-        return properties
+        return file.toProperties()
+    }
+
+    fun File.toProperties() = Properties().apply {
+        if (this@toProperties.exists()) {
+            load(reader())
+        }
     }
 }
