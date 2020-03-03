@@ -55,8 +55,18 @@ subprojects {
                     "\"${Secrets.currencyLayerAccessToken}\""
                 )
             }
+            debug {
+                buildConfigField("String", "CURRENCY_API_URL", "\"http://apilayer.net/\"")
+                buildConfigField("String", "CURRENCY_API_URL_PATH", "\"api/live\"")
+            }
             release {
                 isMinifyEnabled = false
+                buildConfigField(
+                    "String",
+                    "CURRENCY_API_URL",
+                    "\"https://simple-currency-backend.herokuapp.com/\""
+                )
+                buildConfigField("String", "CURRENCY_API_URL_PATH", "\"currency\"")
                 proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
                 proguardFile(file("proguard-rules.pro"))
             }
@@ -64,6 +74,8 @@ subprojects {
     }
 }
 
-fun <T> NamedDomainObjectContainer<T>.release(configure: T.() -> Unit) = getByName("release", configure)
+fun <T> NamedDomainObjectContainer<T>.release(configure: T.() -> Unit) =
+    getByName("release", configure)
+
 fun <T> NamedDomainObjectContainer<T>.debug(configure: T.() -> Unit) = getByName("debug", configure)
 fun <T> NamedDomainObjectContainer<T>.all(configure: T.() -> Unit) = getByName("all", configure)

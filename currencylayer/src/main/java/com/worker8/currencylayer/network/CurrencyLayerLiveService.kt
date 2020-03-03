@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface CurrencyLayerLiveService {
-    @GET("api/live")
+@GET(BuildConfig.CURRENCY_API_URL_PATH)
     fun getCurrencies(
         @Query("access_key") accessKey: String = BuildConfig.CURRENCY_LAYER_ACCCES_KEY,
         @Query("currencies") currencies: String = Currency.ALL_STRING,

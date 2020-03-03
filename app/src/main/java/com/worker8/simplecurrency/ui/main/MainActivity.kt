@@ -94,7 +94,7 @@ class MainActivity : DaggerAppCompatActivity() {
                 viewActionLocal.showTerminalError()
             })
             .addTo(disposableBag)
-        
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

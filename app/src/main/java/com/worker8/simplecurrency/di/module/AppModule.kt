@@ -3,15 +3,14 @@ package com.worker8.simplecurrency.di.module
 import android.content.Context
 import androidx.room.Room
 import androidx.work.WorkManager
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.squareup.moshi.Moshi
 import com.worker8.currencylayer.network.CurrencyLayerLiveService
 import com.worker8.currencylayer.network.CurrencyLayerMoshi
 import com.worker8.currencylayer.network.CurrencyLayerRetrofit
-import com.worker8.simplecurrency.BuildConfig
 import com.worker8.simplecurrency.SimpleCurrencyApplication
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.di.scope.ScopeConstant
+import com.worker8.simplecurrency.provideOkHttpClient
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -45,14 +44,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideOKHttp3(): OkHttpClient {
-        return if (BuildConfig.DEBUG) {
-            OkHttpClient.Builder()
-                .addNetworkInterceptor(StethoInterceptor())
-                .build()
-        } else {
-            OkHttpClient.Builder()
-                .build()
-        }
+        return provideOkHttpClient()
     }
 
     @Singleton

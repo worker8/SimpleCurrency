@@ -26,7 +26,6 @@ class UpdateCurrencyWorker(appContext: Context, workerParams: WorkerParameters) 
 
         val response = service.getCurrencies()
             .blockingGet()
-
         val roomConversionRateList = response.quotes.conversionRates.map {
             RoomConversionRate.fromConversionRate(it)
         }
