@@ -61,7 +61,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideCurrencyLayerLiveService(retrofit: Retrofit): FixerIOLiveService {
+    fun provideFixerIOLiveService(retrofit: Retrofit): FixerIOLiveService {
         return retrofit.create(FixerIOLiveService::class.java)
     }
 

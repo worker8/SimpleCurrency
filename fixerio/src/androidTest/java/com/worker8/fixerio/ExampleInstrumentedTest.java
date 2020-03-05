@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.worker8.currencylayer.test", appContext.getPackageName());
+        assertEquals("com.worker8.fixerio.test", appContext.getPackageName());
     }
 }

@@ -40,16 +40,16 @@ click to show screenshots
 - landscape mode supported
 
 ## How to Setup
-The API used for obtaining the latest currency data is [CurrencyLayer.com](https://currencylayer.com). A free account can be made easily and it will provide an API key. You need to fill up the API key in `api_keys.properties` file at the root of this project. Instructions:
+The API used for obtaining the latest currency data is [Fixer.io](https://fixer.io/). A free account can be made easily and it will provide an API key. You need to fill up the API key in `api_keys.properties` file at the root of this project. Instructions:
 
 1. make a file named `api_keys.properties` in the root of the project
-2. add this line in the file: `CURRENCY_LAYER_ACCESS_TOKEN=<fill in API key obtained from Currency Layer>`
+2. add this line in the file: `FIXER_IO_ACCESS_TOKEN=<fill in API key obtained from Fixer.io>`
 
 This is how the file looks like:
 
 ```shell
 ༼つ◕_◕༽つ RootOfSimpleCurrency (master)$ cat api_keys.properties
-CURRENCY_LAYER_ACCESS_TOKEN=d0bbf06c7xxxxxxxxxxxx47d2e56ed6f
+FIXER_IO_ACCESS_TOKEN=d0bbf06c7xxxxxxxxxxxx47d2e56ed6f
 
 ```
 
@@ -79,7 +79,7 @@ Room Persistence library is used to access SQLite easily. This is used to store 
 
 In every periodic interval (currently set at every 30 minutes), the `WorkManager` will fire up a Retrofit call to get the latest currency rate. The obtained json will be deserialized by Moshi and write into the database.
 
-The currency layer network library is extracted into a separate **module** so that it can be decoupled from the main app. It can be launched as a standalone separate network library or being swapped out and replaced by another currency API.
+The fixer io network library is extracted into a separate **module** so that it can be decoupled from the main app. It can be launched as a standalone separate network library or being swapped out and replaced by another currency API.
 
 ### Unidirectional data flow & Immutable data
 The project follows the unidirectional data flow rule to better structure the code.

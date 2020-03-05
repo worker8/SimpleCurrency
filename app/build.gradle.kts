@@ -3,7 +3,7 @@ android {
         applicationId = "com.worker8.simplecurrency"
     }
     dependencies {
-        implementation(project(":currencylayer"))
+        implementation(project(":fixerio"))
 
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.Tool.kotlin}")
 
