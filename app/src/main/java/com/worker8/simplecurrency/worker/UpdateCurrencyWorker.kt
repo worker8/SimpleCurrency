@@ -3,7 +3,7 @@ package com.worker8.simplecurrency.worker
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.worker8.currencylayer.network.CurrencyLayerLiveService
+import com.worker8.fixerio.network.FixerIOLiveService
 import com.worker8.simplecurrency.SimpleCurrencyApplication
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class UpdateCurrencyWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
     @Inject
-    lateinit var service: CurrencyLayerLiveService
+    lateinit var service: FixerIOLiveService
     @Inject
     lateinit var db: SimpleCurrencyDatabase
 
@@ -26,7 +26,7 @@ class UpdateCurrencyWorker(appContext: Context, workerParams: WorkerParameters) 
 
         val response = service.getCurrencies()
             .blockingGet()
-        val roomConversionRateList = response.quotes.conversionRates.map {
+        val roomConversionRateList = response.rates.conversionRates.map {
             RoomConversionRate.fromConversionRate(it)
         }
         db.roomConversionRateDao().insert(roomConversionRateList)

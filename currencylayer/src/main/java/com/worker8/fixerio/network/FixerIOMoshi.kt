@@ -1,9 +1,9 @@
-package com.worker8.currencylayer.network
+package com.worker8.fixerio.network
 
 import com.squareup.moshi.Moshi
-import com.worker8.currencylayer.adapter.ConversionsFactory
+import com.worker8.fixerio.adapter.ConversionsFactory
 
-class CurrencyLayerMoshi {
+class FixerIOMoshi {
     companion object {
         fun build(): Moshi = Moshi
             .Builder()

@@ -51,13 +51,13 @@ subprojects {
             all {
                 buildConfigField(
                     "String",
-                    "CURRENCY_LAYER_ACCCES_KEY",
-                    "\"${Secrets.currencyLayerAccessToken}\""
+                    "FIXER_IO_ACCCES_KEY",
+                    "\"${Secrets.fixerIOAccessToken}\""
                 )
             }
             debug {
-                buildConfigField("String", "CURRENCY_API_URL", "\"http://apilayer.net/\"")
-                buildConfigField("String", "CURRENCY_API_URL_PATH", "\"api/live\"")
+                buildConfigField("String", "CURRENCY_API_URL", "\"http://data.fixer.io/\"")
+                buildConfigField("String", "CURRENCY_API_URL_PATH", "\"api/latest\"")
             }
             release {
                 isMinifyEnabled = false

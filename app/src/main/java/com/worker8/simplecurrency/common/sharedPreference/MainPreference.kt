@@ -24,7 +24,7 @@ class MainPreference {
             context.defaultPrefs().save(TARGET_CURRENCY, currencyCode)
 
         fun getSelectedTargetCurrencyCode(context: Context) =
-            context.defaultPrefs().get(TARGET_CURRENCY, "USD")
+            context.defaultPrefs().get(TARGET_CURRENCY, "EUR")
 
     }
 }

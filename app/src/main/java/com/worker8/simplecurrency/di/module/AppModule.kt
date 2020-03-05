@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.work.WorkManager
 import com.squareup.moshi.Moshi
-import com.worker8.currencylayer.network.CurrencyLayerLiveService
-import com.worker8.currencylayer.network.CurrencyLayerMoshi
-import com.worker8.currencylayer.network.CurrencyLayerRetrofit
+import com.worker8.fixerio.network.FixerIOLiveService
+import com.worker8.fixerio.network.FixerIOMoshi
+import com.worker8.fixerio.network.FixerIORetrofit
 import com.worker8.simplecurrency.SimpleCurrencyApplication
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.di.scope.ScopeConstant
@@ -38,7 +38,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
-        return CurrencyLayerMoshi.build()
+        return FixerIOMoshi.build()
     }
 
     @Singleton
@@ -50,7 +50,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit {
-        return CurrencyLayerRetrofit.build(moshi, okHttpClient)
+        return FixerIORetrofit.build(moshi, okHttpClient)
     }
 
     @Singleton
@@ -61,8 +61,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideCurrencyLayerLiveService(retrofit: Retrofit): CurrencyLayerLiveService {
-        return retrofit.create(CurrencyLayerLiveService::class.java)
+    fun provideCurrencyLayerLiveService(retrofit: Retrofit): FixerIOLiveService {
+        return retrofit.create(FixerIOLiveService::class.java)
     }
 
     @Named(ScopeConstant.MainThreadScheduler)

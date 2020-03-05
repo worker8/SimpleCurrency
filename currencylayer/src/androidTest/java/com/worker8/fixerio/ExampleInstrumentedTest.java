@@ -1,4 +1,4 @@
-package com.worker8.currencylayer;
+package com.worker8.fixerio;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,12 +1,12 @@
-package com.worker8.currencylayer.adapter
+package com.worker8.fixerio.adapter
 
 import com.squareup.moshi.*
-import com.worker8.currencylayer.model.ConversionRate
-import com.worker8.currencylayer.model.Quotes
+import com.worker8.fixerio.model.ConversionRate
+import com.worker8.fixerio.model.Rates
 import java.lang.reflect.Type
 
-class QuotesCustomAdapter : JsonAdapter<Quotes>() {
-    override fun fromJson(reader: JsonReader): Quotes? {
+class RatesCustomAdapter : JsonAdapter<Rates>() {
+    override fun fromJson(reader: JsonReader): Rates? {
         val list = mutableListOf<ConversionRate>()
 
         reader.beginObject()
@@ -19,20 +19,24 @@ class QuotesCustomAdapter : JsonAdapter<Quotes>() {
             )
         }
         reader.endObject()
-        return Quotes().apply {
+        return Rates().apply {
             conversionRates = list
         }
     }
 
-    override fun toJson(writer: JsonWriter, value: Quotes?) {
+    override fun toJson(writer: JsonWriter, value: Rates?) {
         //TODO: write this if needed
     }
 }
 
 class ConversionsFactory : JsonAdapter.Factory {
-    override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        if (Types.getRawType(type).isAssignableFrom(Quotes::class.java)) {
-            return QuotesCustomAdapter()
+    override fun create(
+        type: Type,
+        annotations: MutableSet<out Annotation>,
+        moshi: Moshi
+    ): JsonAdapter<*>? {
+        if (Types.getRawType(type).isAssignableFrom(Rates::class.java)) {
+            return RatesCustomAdapter()
         }
         return null
     }

@@ -1,7 +1,7 @@
 package com.worker8.simplecurrency.ui.picker
 
 import androidx.lifecycle.*
-import com.worker8.currencylayer.model.Currency
+import com.worker8.fixerio.model.Currency
 import com.worker8.simplecurrency.common.addTo
 import com.worker8.simplecurrency.common.extension.toThreeDecimalWithComma
 import com.worker8.simplecurrency.common.extension.toTwoDecimalWithComma
@@ -39,10 +39,10 @@ class PickerViewModel(private val repo: PickerRepo) :
                         resultSet.add(roomConversionRate.run {
                             val baseToTargetRate = (rate / baseCurrency)
                             PickerAdapter.PickerRowType(
-                                currencyName = Currency.ALL[getCodeWithoutUSD()] ?: "",
-                                currencyRate = "1 ${repo.getSelectedBaseCurrencyCode()} = ${baseToTargetRate.toThreeDecimalWithComma()} ${getCodeWithoutUSD()}",
-                                currencyRateCalculated = "${inputAmount.toTwoDecimalWithComma()} ${repo.getSelectedBaseCurrencyCode()} = ${(inputAmount * baseToTargetRate).toTwoDecimalWithComma()} ${getCodeWithoutUSD()}",
-                                currencyCode = getCodeWithoutUSD()
+                                currencyName = Currency.ALL[code] ?: "",
+                                currencyRate = "1 ${repo.getSelectedBaseCurrencyCode()} = ${baseToTargetRate.toThreeDecimalWithComma()} ${code}",
+                                currencyRateCalculated = "${inputAmount.toTwoDecimalWithComma()} ${repo.getSelectedBaseCurrencyCode()} = ${(inputAmount * baseToTargetRate).toTwoDecimalWithComma()} ${code}",
+                                currencyCode = code
                             )
                         })
                     }
@@ -51,6 +51,7 @@ class PickerViewModel(private val repo: PickerRepo) :
                 .subscribe({
                     dispatch(currentScreenState.copy(currencyList = it))
                 }, {
+                    it.printStackTrace()
                     viewAction.showTerminalError()
                 })
                 .addTo(disposableBag)

@@ -26,13 +26,13 @@ class PickerRepo @Inject constructor(
 ) {
     fun getAllCurrenciesFromDb(searchText: String): Observable<List<RoomConversionRate>> =
         db.roomConversionRateDao().findRoomConversionRateFlowable(
-            "%USD$searchText%",
+            "%$searchText%",
             "%$searchText%"
         ).toObservable()
 
     fun getBaseRate(): List<RoomConversionRate> {
         val baseCurrency = getSelectedBaseCurrencyCode()
-        return db.roomConversionRateDao().findConversionRate("USD$baseCurrency")
+        return db.roomConversionRateDao().findConversionRate("$baseCurrency")
     }
 
     fun getLatestUpdatedDate(): Observable<String> {
@@ -42,7 +42,7 @@ class PickerRepo @Inject constructor(
             if (foundList.isNotEmpty()) {
                 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm a")
                 val zonedDateTime = ZonedDateTime.ofInstant(
-                    Instant.ofEpochSecond(foundList[0].updatedAt),
+                    Instant.ofEpochSecond(foundList[0].timeStamp),
                     ZoneId.systemDefault()
                 )
                 zonedDateTime.format(formatter)

@@ -3,7 +3,7 @@ package com.worker8.simplecurrency.ui.main
 import android.content.Context
 import androidx.work.*
 import com.squareup.moshi.Moshi
-import com.worker8.currencylayer.network.SeedCurrencyLayerLiveService
+import com.worker8.fixerio.network.SeedFixerIOLiveService
 import com.worker8.simplecurrency.common.sharedPreference.MainPreference
 import com.worker8.simplecurrency.db.SimpleCurrencyDatabase
 import com.worker8.simplecurrency.db.entity.RoomConversionRate
@@ -33,7 +33,7 @@ class MainRepo @Inject constructor(
         return Observable.fromCallable {
             if (MainPreference.getFirstTime(context)) {
                 // populate
-                val (quotes, timestamp) = SeedCurrencyLayerLiveService(moshi).getSeedCurrencies()
+                val (quotes, timestamp) = SeedFixerIOLiveService(moshi).getSeedCurrencies()
                 val roomConversionRateList = quotes.conversionRates.map {
                     RoomConversionRate.fromConversionRate(it)
                 }
@@ -60,12 +60,12 @@ class MainRepo @Inject constructor(
 
     private fun getBaseRateFlowable(): Flowable<List<RoomConversionRate>> {
         val baseCurrency = getSelectedBaseCurrencyCode() // "JPY"
-        return db.roomConversionRateDao().findConversionRateFlowable("USD$baseCurrency")
+        return db.roomConversionRateDao().findConversionRateFlowable("$baseCurrency")
     }
 
     private fun getTargetRateFlowable(): Flowable<List<RoomConversionRate>> {
         val targetCurrency = getSelectedTargetCurrencyCode() // "JPY"
-        return db.roomConversionRateDao().findConversionRateFlowable("USD$targetCurrency")
+        return db.roomConversionRateDao().findConversionRateFlowable("$targetCurrency")
     }
 
     override fun getLatestSelectedRateFlowable(): Flowable<Double> {
