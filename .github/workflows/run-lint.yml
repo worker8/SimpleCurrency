@@ -22,7 +22,6 @@ jobs:
   #      - name: Unit tests
   #        run: bash ./gradlew test --stacktrace
   lint:
-    apk:
       name: Run Lint
       runs-on: ubuntu-18.04
 
