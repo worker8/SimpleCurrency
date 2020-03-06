@@ -10,6 +10,9 @@ object Secrets {
     }
     val fixerIOAccessToken: String by lazy {
         var fixerIOToken = ""
+        System.out.println("----------------ENV--------------")
+        System.out.println(ENV)
+        System.out.println("---------------------------------")
         if (isGithubActionsCI()) {
             // running on: Github Actions CI
             if (!ENV.containsKey(FIXER_IO_ACCESS_TOKEN)) {
