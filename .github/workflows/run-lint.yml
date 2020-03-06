@@ -22,17 +22,19 @@ jobs:
   #      - name: Unit tests
   #        run: bash ./gradlew test --stacktrace
   lint:
-      name: Run Lint
-      runs-on: ubuntu-18.04
+    name: Run Lint
+      env:
+        FIXER_IO_ACCESS_TOKEN: ${{ secrets.FIXER_IO_ACCESS_TOKEN }}
+    runs-on: ubuntu-18.04
 
-      steps:
-        - uses: actions/checkout@v1
-        - name: set up JDK 1.8
-          uses: actions/setup-java@v1
-          with:
-            java-version: 1.8
-        - name: Run lint
-          run: bash ./gradlew lint
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Run lint
+        run: bash ./gradlew lint
 #  apk:
 #    name: Generate APK
 #    runs-on: ubuntu-18.04
