@@ -38,7 +38,7 @@ jobs:
       - name: Run Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.6'
+          ruby-version: 2.6
         run: bash ruby temp.rb ${{ secrets.HOME }}
 
 #  apk:
