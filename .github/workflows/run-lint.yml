@@ -40,7 +40,7 @@ jobs:
         with:
           ruby-version: 2.6
       - name: run Ruby
-        run: bash ruby temp.rb ${{ GITHUB_HOME }}
+        run: bash ruby temp.rb ${{ HOME }}
 
 #  apk:
 #    name: Generate APK
