@@ -35,10 +35,11 @@ jobs:
         env:
           FIXER_IO_ACCESS_TOKEN: ${{ secrets.FIXER_IO_ACCESS_TOKEN }}
         run: bash ./gradlew lint
-      - name: Run Ruby
+      - name: setup Ruby
         uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.6
+      - name: run Ruby
         run: bash ruby temp.rb ${{ secrets.HOME }}
 
 #  apk:
