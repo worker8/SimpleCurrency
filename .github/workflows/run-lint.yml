@@ -40,6 +40,8 @@ jobs:
         with:
           ruby-version: 2.6
       - name: run Ruby
+        env:
+          HOME: $HOME
         run: bash ruby temp.rb $HOME
 
 #  apk:
