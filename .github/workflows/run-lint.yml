@@ -65,9 +65,10 @@ jobs:
         with:
           ruby-version: 2.6
       - name: run Ruby
+        uses: actions/checkout@v2
         env:
           ASDF: ${{ runner.workspace }}
-        run: ruby $ASDF/temp.rb
+        run: ruby temp.rb
 #  apk:
 #    name: Generate APK
 #    runs-on: ubuntu-18.04
