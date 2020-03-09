@@ -66,8 +66,8 @@ jobs:
           ruby-version: 2.6
       - name: run Ruby
         env:
-          ASDF: ${{ github.workspace }}
-        run: ruby temp.rb $ASDF
+          ASDF: ${{ runner.workspace }}
+        run: ruby $ASDF/temp.rb
 #  apk:
 #    name: Generate APK
 #    runs-on: ubuntu-18.04
