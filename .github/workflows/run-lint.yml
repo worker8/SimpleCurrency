@@ -41,7 +41,7 @@ jobs:
           ruby-version: 2.6
       - name: run Ruby
         env:
-          ASDF: ${{ env.GITHUB_WORKSPACE }}
+          ASDF: ${{ github.workspace }}
         run: bash ruby temp.rb $ASDF
 
 #  apk:
