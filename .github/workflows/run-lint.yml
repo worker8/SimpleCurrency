@@ -35,10 +35,10 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.6
-      - name: Run lint && parse lint-results.xml
-        env:
-          FIXER_IO_ACCESS_TOKEN: ${{ secrets.FIXER_IO_ACCESS_TOKEN }}
-        run: bash ./gradlew lint && ruby temp.rb
+#      - name: Run lint && parse lint-results.xml
+#        env:
+#          FIXER_IO_ACCESS_TOKEN: ${{ secrets.FIXER_IO_ACCESS_TOKEN }}
+#        run: bash ./gradlew lint && ruby temp.rb
 
 
       - name: Dump GitHub context
