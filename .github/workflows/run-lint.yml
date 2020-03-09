@@ -40,8 +40,8 @@ jobs:
           FIXER_IO_ACCESS_TOKEN: ${{ secrets.FIXER_IO_ACCESS_TOKEN }}
           BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
-#        run: bash ./gradlew lint && ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
-        run: ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
+        run: bash ./gradlew lint && ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
+#        run: ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
 
       - name: Dump GitHub context
         env:
