@@ -35,14 +35,7 @@ jobs:
       #        env:
       #          FIXER_IO_ACCESS_TOKEN: ${{ secrets.FIXER_IO_ACCESS_TOKEN }}
       #        run: bash ./gradlew lint
-      - name: setup Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.6
-      - name: run Ruby
-        env:
-          ASDF: ${{ github.workspace }}
-        run: ruby temp.rb $ASDF
+
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -67,7 +60,14 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
-
+      - name: setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - name: run Ruby
+        env:
+          ASDF: ${{ github.workspace }}
+        run: ruby temp.rb $ASDF
 #  apk:
 #    name: Generate APK
 #    runs-on: ubuntu-18.04
