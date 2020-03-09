@@ -64,8 +64,8 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.6
+      - uses: actions/checkout@v2
       - name: run Ruby
-        uses: actions/checkout@v2
         env:
           ASDF: ${{ runner.workspace }}
         run: ruby temp.rb
