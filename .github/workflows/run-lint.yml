@@ -41,6 +41,7 @@ jobs:
           BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
         run: |
+          ./gradlew lint
           gem install bundler
           bundle install
           bundle exec ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
