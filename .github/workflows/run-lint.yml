@@ -68,7 +68,9 @@ jobs:
       - name: run Ruby
         env:
           ASDF: ${{ runner.workspace }}
-        run: ruby temp.rb
+        run: ruby temp.rb && bash find . -iname "lint-results.xml"
+#                 file:///home/runner/work/SimpleCurrency/SimpleCurrency/app/build/reports/lint-results.xml
+#Working directory is '/home/runner/work/SimpleCurrency/SimpleCurrency'
 #  apk:
 #    name: Generate APK
 #    runs-on: ubuntu-18.04
