@@ -41,37 +41,36 @@ jobs:
           BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
         run: |
-#          bash ./gradlew lint
           gem install bundler
           bundle install
           bundle exec ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
 
 #        run: ruby temp.rb $BOT_GITHUB_TOKEN $PR_NUMBER
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
+#      - name: Dump GitHub context
+#        env:
+#          GITHUB_CONTEXT: ${{ toJson(github) }}
+#        run: echo "$GITHUB_CONTEXT"
+#      - name: Dump job context
+#        env:
+#          JOB_CONTEXT: ${{ toJson(job) }}
+#        run: echo "$JOB_CONTEXT"
+#      - name: Dump steps context
+#        env:
+#          STEPS_CONTEXT: ${{ toJson(steps) }}
+#        run: echo "$STEPS_CONTEXT"
+#      - name: Dump runner context
+#        env:
+#          RUNNER_CONTEXT: ${{ toJson(runner) }}
+#        run: echo "$RUNNER_CONTEXT"
+#      - name: Dump strategy context
+#        env:
+#          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+#        run: echo "$STRATEGY_CONTEXT"
+#      - name: Dump matrix context
+#        env:
+#          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+#        run: echo "$MATRIX_CONTEXT"
 #      - name: setup Ruby
 #        uses: actions/setup-ruby@v1
 #        with:
