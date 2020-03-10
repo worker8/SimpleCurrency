@@ -5,8 +5,10 @@ puts "ARGV: #{ARGV}"
 BOT_GITHUB_TOKEN = ARGV[0]
 PR_NUMBER = ARGV[1]
 repo_name = "worker8/SimpleCurrency"
+lint_filename = "./app/build/reports/lint-results.xml"
+message_when_no_lint_issues = "There is no warnings and errors by Android Lint! All good! :)"
 
-file = File.open("./app/build/reports/lint-results.xml")
+file = File.open(lint_filename)
 
 warning_body = <<~EOF
 <details>
@@ -46,7 +48,7 @@ issues.map do |issue|
   file = location.attr("file").to_s.gsub(Dir.pwd + "/","")
   line = location.attr("line")
   column = location.attr("column")
-  
+
   # ----- rendering ----
   if severity.casecmp? "warning"
     warning_count += 1
@@ -66,7 +68,7 @@ error_body.gsub!("XXerror_numberXX", error_count.to_s)
 error_body += "</details>"
 
 if warning_count == 0 && error_count == 0
-  body_string = "There is no warnings and errors by Android Lint! All good! :)"
+  body_string = message_when_no_lint_issues
 elsif warning_count != 0 && error_count == 0
   body_string = warning_body
 elsif warning_count -= 0 && error_count != 0
@@ -74,7 +76,7 @@ elsif warning_count -= 0 && error_count != 0
 elsif warning_count != 0 && error_count != 0
   body_string = error_body + "<br>" + warning_body
 end
- 
+
 #puts body_string
 
 # ----- sending to Github Pull Request --------
