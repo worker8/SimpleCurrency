@@ -1,3 +1,10 @@
+import com.worker8.gradle.lintModel.Issue
+import com.worker8.gradle.lintModel.Issues
+import com.worker8.gradle.lintModel.Location
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import javax.xml.parsers.DocumentBuilderFactory
+
 android {
     defaultConfig {
         applicationId = "com.worker8.simplecurrency"
@@ -48,4 +55,75 @@ android {
         androidTestImplementation("androidx.test:runner:${Versions.Test.runner}")
         androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.Test.espresso}")
     }
+}
+
+open class GithubTask : DefaultTask() {
+    @TaskAction
+    fun hey() {
+
+    }
+}
+
+open class DebugTask : DefaultTask() {
+    val message = project.objects.property<String>()
+    @TaskAction
+    fun greet() {
+        val xmlFile = File("lint-results.xml")
+        val documentBuilderFactory = DocumentBuilderFactory.newInstance()
+        val documentBuilder = documentBuilderFactory.newDocumentBuilder()
+        val document = documentBuilder.parse(xmlFile)
+        document.getDocumentElement().normalize()
+
+        val issuesNodeList = document.getElementsByTagName("issues")
+        if (issuesNodeList != null && issuesNodeList.length > 0) {
+            val issuesElement = issuesNodeList.item(0) as Element
+            val issues = Issues()
+            for (i in 0 until issuesElement.childNodes.length) {
+                val child = issuesElement.childNodes.item(i)
+                if (child.getNodeType() == Node.ELEMENT_NODE) {
+                    val element = child as Element
+                    val locationElement =
+                        element.getElementsByTagName("location").item(0) as Element
+                    val issue = Issue(
+                        id = element.getAttribute("id"),
+                        severity = element.getAttribute("severity"),
+                        message = element.getAttribute("message"),
+                        category = element.getAttribute("category"),
+                        priority = element.getAttribute("priority"),
+                        summary = element.getAttribute("summary"),
+                        explanation = element.getAttribute("explanation"),
+                        errorLine1 = element.getAttribute("errorLine1"),
+                        errorLine2 = element.getAttribute("errorLine2"),
+                        location = Location(
+                            file = locationElement.getAttribute("file"),
+                            line = locationElement.getAttribute("line"),
+                            column = locationElement.getAttribute("column")
+                        )
+                    )
+                    if (issue.category == "Warning") {
+                        issues.warningList.add(issue)
+                    } else if (issue.category == "Error") {
+                        issues.errorList.add(issue)
+                    }
+                }
+            }
+//            val github = com.jcabi.github.RtGithub(".. your OAuth token ..")
+//            val repo = github.repos().get(
+//                Coordinates.Simple("octocat/Hello-World")
+//            )
+//            val issue = repo.issues().create("How are you?", "Please tell me...")
+//            issue.comments().post("My first comment!")
+        } else {
+            System.out.println("There is no lint warnings or errors! :)")
+        }
+    }
+}
+
+tasks {
+
+    // `hello` is a `TaskProvider<GreetingTask>`
+    val hello by registering(DebugTask::class) {
+
+    }
+    val github by registering(GithubTask::class)
 }
