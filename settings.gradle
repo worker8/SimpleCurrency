@@ -1,1 +1,2 @@
+include ':networking'
 include ':app', ':fixerio'

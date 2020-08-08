@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/splashIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="999dp"
+        app:layout_constraintBottom_toTopOf="@id/splashTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@mipmap/ic_logo" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/splashTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+        android:fontFamily="serif-monospace"
+        android:text="Simple Currency"
+        android:textColor="@android:color/white"
+        android:textSize="26dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/splashMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/splashMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.5"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Loading currency information"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/splashGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/splashProgressBar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:alpha="0.5"
+        android:backgroundTint="@android:color/white"
+        android:foregroundTint="@android:color/white"
+        android:progressBackgroundTint="@android:color/white"
+        android:progressTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/splashMessage"
+        app:layout_constraintStart_toEndOf="@id/splashMessage"
+        app:layout_constraintTop_toTopOf="@id/splashMessage" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/splashGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

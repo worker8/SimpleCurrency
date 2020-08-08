@@ -1,8 +1,6 @@
-package com.worker8.fixerio.adapter
+package com.worker8.simplecurrency.networking
 
 import com.squareup.moshi.*
-import com.worker8.fixerio.model.ConversionRate
-import com.worker8.fixerio.model.Rates
 import java.lang.reflect.Type
 
 class RatesCustomAdapter : JsonAdapter<Rates>() {

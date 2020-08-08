@@ -13,13 +13,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="@bool/usesCleartextTraffic">
         <activity android:name=".ui.main.MainActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".ui.picker.PickerActivity" />
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.picker.PickerActivity" />
     </application>
 
 </manifest>

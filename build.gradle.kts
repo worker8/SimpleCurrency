@@ -2,6 +2,7 @@ import com.android.build.gradle.BaseExtension
 import com.worker8.gradle.Secrets
 
 buildscript {
+    val kotlin_version by extra("1.3.72")
     repositories {
         google()
         jcenter()
