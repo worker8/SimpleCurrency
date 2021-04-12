@@ -1,0 +1,29 @@
+name: Android Pull Request & Master CI
+
+on:
+  pull_request:
+    branches:
+      - '*'
+#  push:
+#    branches:
+#      - 'master'
+
+jobs:
+  lint:
+    name: Run Lint
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.BOT_GITHUB_TOKEN }}
+      - name: setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Run lint && parse lint-results.xml && send report to PR
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          ./gradlew app:lintDebug && ./gradlew parseAndSendLintResult -PgithubPullRequestId=$PR_NUMBER -PgithubToken=$GITHUB_TOKEN
