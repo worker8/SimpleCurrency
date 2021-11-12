@@ -5,4 +5,8 @@
     <string name="from">FROM</string>
     <string name="to">TO</string>
     <string name="error_message">Ops, there is an error, please restart the app…</string>
+
+    <!--  unused strings to test ci  -->
+    <string name="unused_string1">Unused 123</string>
+    <string name="unused_string2">Unused 456</string>
 </resources>
