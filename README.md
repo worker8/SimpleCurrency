@@ -153,7 +153,7 @@ While we run the following:
         onNumpad0Click.onNext('0')
 ```
 
-It is actually doing these:
+It's actually doing these:
 
 1. `populateDbIfFirstTime.onNext(true)` - seeded the db
 2. `getLatestSelectedRateFlowable.offer(fakeRate)` - taken the latest conversion rate from db
