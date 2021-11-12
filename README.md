@@ -10,7 +10,7 @@ Get it in the Playstore:
 <a href='https://play.google.com/store/apps/details?id=com.worker8.simplecurrency&utm_source=github&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="250px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 ## Demo Gif
-Here's a quick demo of how it works:
+Here is a quick demo of how it works:
 
 <details>
 <summary>
