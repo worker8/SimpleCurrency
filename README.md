@@ -5,12 +5,12 @@
 Simple Currency is an application that handles currency conversion from 168 countries. 
 
 ## Playstore
-Get it in the Playstore:
+Get it in the Playstore: 
 
 <a href='https://play.google.com/store/apps/details?id=com.worker8.simplecurrency&utm_source=github&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="250px" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 ## Demo Gif
-Here's a quick demo of how it works:
+Here is a quick demo of how it works:
 
 <details>
 <summary>
@@ -153,7 +153,7 @@ While we run the following:
         onNumpad0Click.onNext('0')
 ```
 
-It is actually doing these:
+It's actually doing these:
 
 1. `populateDbIfFirstTime.onNext(true)` - seeded the db
 2. `getLatestSelectedRateFlowable.offer(fakeRate)` - taken the latest conversion rate from db
